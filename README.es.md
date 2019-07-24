@@ -1,34 +1,34 @@
-# Building a UI from scratch, based on a design with ReactJS
+# Construyendo una UI desde cero, en base a un diseño con ReactJS
 
-In this article we will build a UI following a design. We will use `Figma` to visualize the design, but is also possible to use any other tool that allow you to extract the CSS code from the elements, such as `invisionapp`, `zeplin`, etc.
+En este articulo construiremos una UI siguiendo un diseño. Como herramienta para visualizar el diseño utilizaremos `Figma`, pero se puede utilizar cualquier otra herramienta que te permita extraer el codigo CSS de los elementos, como por ejemplo `invisionapp`, `zeplin`, etc.
 
-*Read this in [Spanish](README.es.md)*
+*Leer en [Inglés](README.md)*
 
 **Live demo**: [https://llorentegerman.github.io/react-admin-dashboard/](https://llorentegerman.github.io/react-admin-dashboard/)
 
-**Repository**: [https://github.com/llorentegerman/react-admin-dashboard](https://github.com/llorentegerman/react-admin-dashboard)
+**Repositorio**: [https://github.com/llorentegerman/react-admin-dashboard](https://github.com/llorentegerman/react-admin-dashboard)
 
-### Uploading a design to Figma
-I will not enter in details about the tool, we only need a design.
-1. Create an account in [https://www.figma.com](https://www.figma.com) (free).
-2. I have selected a random *Figma file* from [https://www.figmafreebies.com](https://www.figmafreebies.com) (free). The selected file is: [Figma Admin Dashboard UI Kit](https://www.figmafreebies.com/download/figma-admin-dashboard-ui-kit/).
-I'm using web version of Figma, so, you have to click `DOWNLOAD FREEBIES` button, and the design will be added to your account.
-3. You can double click on each element and see the css code related to it in the `code` tab that is in the right column.
+### Cargando un diseño en Figma
+No entrare en detalles sobre esta herramienta, solo necesitamos un diseño.
+1. Crear una cuenta en [https://www.figma.com](https://www.figma.com) (es gratis).
+2. He seleccionado al azar un *Figma file* desde [https://www.figmafreebies.com](https://www.figmafreebies.com) (es gratis). El archivo seleccionado es: [Figma Admin Dashboard UI Kit](https://www.figmafreebies.com/download/figma-admin-dashboard-ui-kit/).
+Estoy usando la version web, solo es necesario hacer click en el boton `DOWNLOAD FREEBIES` y el diseño se adjuntara a tu cuenta automaticamente.
+3. Puedes hacer doble click sobre los diferentes elementos y ver el codigo css de cada uno en la pestaña `code` que esta en la columna de la derecha.
 
 ![screenshot3](https://i.postimg.cc/76vy3ckT/screenshot3.png)
 
-### Creating the app
-For this step we will use [Create React App](https://facebook.github.io/create-react-app/):
+### Creando la app
+Para este paso utilizaremos [Create React App](https://facebook.github.io/create-react-app/):
 ```
 npx create-react-app react-admin-dashboard
 ```
 
-We will use [aphrodite](https://www.npmjs.com/package/aphrodite) for the styles and [simple-flexbox](https://www.npmjs.com/package/simple-flexbox) to make the layout.
+Utilizaremos [aphrodite](https://www.npmjs.com/package/aphrodite) para los estilos y [simple-flexbox](https://www.npmjs.com/package/simple-flexbox) para hacer el layout.
 
-`yarn add aphrodite simple-flexbox` or `npm install aphrodite simple-flexbox`
+`yarn add aphrodite simple-flexbox` o `npm install aphrodite simple-flexbox`
 
-### Folder structure:
-For this case we can keep a simple structure:
+### Estructura de carpetas
+Para este caso mantendremos una estructura simple:
 ```
 /src
     /assets
@@ -36,8 +36,8 @@ For this case we can keep a simple structure:
     App.js
 ```
 
-## Let's do it
-We are ready to start, first we need to identify the main blocks of the design. I have decided to split it into 4 main blocks as follows:
+## Manos a la obra
+Ya tenemos todo listo para comenzar, lo primero que debemos hacer es identificar los bloques principales del diseño. Yo he decidido separarlo en 4 bloques principales de la siguiente manera:
 ```
 1- Sidebar
 2- Main Block
@@ -45,27 +45,27 @@ We are ready to start, first we need to identify the main blocks of the design. 
     4- Content
 ```
 
-As you can see in the image, blocks 3 and 4 are inside block 2.
+Como pueden ver en la imagen, los bloques 3 y 4 estan dentro del 2.
 
 ![Screenshot1](https://i.postimg.cc/bNxzNq1S/screenshot1.png)
 
 ### Sidebar
-We can split the Sidebar in 2 parts, `Logo` block, and `MenuItem` list.
-We need 3 components for this:
+Podemos separar el Sidebar en 2 partes, el bloque del `Logo` y el bloque de la lista de `MenuItem`.
+Para esto necesitaremos 3 componentes:
 ```
 1- SidebarComponent
     2- LogoComponent
-    3- MenuItemComponent (list)
+    3- MenuItemComponent (lista)
 ```
 
 <img src="https://i.postimg.cc/qvppNWGb/screenshot2.png" height="500">
 
-**We will start defining the Logo and Menu Items**
+**Comenzaremos por definir el Logo y los Items del Menu**
 
 #### LogoComponent.js
-First we need to download the Logo (double click on the logo, go to the `Design` tab and click on export button bellow). I downloaded it in `svg` format and imported it as a React Component, you can see it and copy it doing [click here](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/assets/icon-logo.js).
+Primero necesitamos descargar el Logo (doble click sobre el logo, ir a la pestaña `Design` y hacer click en el boton exportar que esta abajo del todo). Yo lo he descargado en formato `svg` y lo he importado como un componente de React, puedes verlo y copiarlo haciendo [click aqui](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/assets/icon-logo.js).
 
-`LogoComponent.js` is a `Row` centered vertically and horizontally, with the `Logo` and the `title`.
+`LogoComponent.js` es una `Row` centrada vertical y horizontalmente, con el `Logo` y el `title`.
 
 ```
 <Row className={css(styles.container)} horizontal="center" vertical="center">
@@ -74,13 +74,13 @@ First we need to download the Logo (double click on the logo, go to the `Design`
 </Row>
 ```
 
-For styles, we need to import `Muli` font family, the easy way is include this line in [App.css](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/App.css) (we can remove the rest of the content, we don't need it):
+Para los estilos, primero necesitamos importar la `font family` `Muli`, la manera facil de hacerlo es incluir esta linea en el archivo [App.css](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/App.css) (y podemos borrar todo el resto del archivo ya que no lo vamos a usar):
 
 ```
 @import url('https://fonts.googleapis.com/css?family=Muli');
 ```
 
-These are the styles for `container` and `title`
+Estos son los estilos que utilizaremos para el container y el titulo.
 
 ```javascript
 container: {
@@ -96,14 +96,14 @@ title: {
     letterSpacing: '0.4px',
     color: '#A4A6B3',
     opacity: 0.7,
-    marginLeft: 12 // <--- necessary to separate title and logo
+    marginLeft: 12 // <--- necesario para separar el titulo y el logo.
 }
 ```
 
-[View full file: LogoComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/sidebar/LogoComponent.js)
+[Ver archivo completo: LogoComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/sidebar/LogoComponent.js)
 
 #### MenuItemComponent.js
-It represents an item of the menu, it's composed by an `icon`, a `title` and has different styles depending of its own state (`active`, `unactive`, `hover`). If it's active, has a white bar at the left.
+Este componente representa un item del menu, esta compuesto por un `icon`, un `title` y tiene diferentes estilos dependiendo de su estado (`activo`, `inactivo`, `hover`).
 
 ```
 <Row className={css(styles.container, active && styles.activeContainer)} vertical="center">
@@ -113,10 +113,10 @@ It represents an item of the menu, it's composed by an `icon`, a `title` and has
 </Row>
 ```
 
-As you can see, there are some special styles depending on `active` property, for example the `title` has a different color when `active` is `true`. For the icons, default fill is `#9FA2B4` and default opacity is `1`, these values change depending on the state of the above mentioned property.
-A special element that appears when the item is `active`, is that white bar on the left (`activeBar`).
+Como puedes ver, hay algunos estilos especiales dependiendo de la propiedad `active`, por ejemplo el `title` tiene un color diferente cuando `active` es `true`. Para los iconos, `fill` por defecto es `#9FA2B4` y la opacity por defecto es `1`, estos valores cambian dependiendo el estado de la propiedad antes mencionada.
+Un elemento especial que aparece cuando el item esta activo, es esa barra blanca a la izquierda (`activeBar`).
 
-These are the styles:
+Estos son los estilos:
 ```javascript
 activeBar: {
     height: 56,
@@ -149,10 +149,10 @@ title: {
     marginLeft: 24
 }
 ```
-[View full file: MenuItemComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/sidebar/MenuItemComponent.js)
+[Ver archivo completo: MenuItemComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/sidebar/MenuItemComponent.js)
 
 #### SidebarComponent.js
-As we did with the Logo, we need to download the icons that we will use in this component, it's possible do it from the design or you can copy them from the folder `assets` of the repository doing [click here](https://github.com/llorentegerman/react-admin-dashboard/tree/master/src/assets).
+Al igual que hicimos con el Logo, necesitamos descargar los iconos que utilizaremos en este componente, es posible hacerlo desde el diseño o puedes copiarlos desde la carepta `assets` del repositorio haciendo [click aqui](https://github.com/llorentegerman/react-admin-dashboard/tree/master/src/assets).
 ```
 ...
 import IconOverview from '../../assets/icon-overview.js';
@@ -173,7 +173,7 @@ import IconOverview from '../../assets/icon-overview.js';
 </Column>
 ```
 
-Based on `css` extracted from the design, we can define the styles with these 3 classes:
+Basandonos en css extraido del diseño, podemos definir los estilos con estas 3 clases:
 ```javascript
 container: {
     backgroundColor: '#363740',
@@ -190,13 +190,13 @@ separator: {
     opacity: 0.06
 }
 ```
-[View full file: SidebarComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/sidebar/SidebarComponent.js)
+[Ver archivo completo: SidebarComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/sidebar/SidebarComponent.js)
 
 
-`SidebarComponent` is ready, in the repository I have added some `onClick` events and a `state` to do it interactive, so you can select the differents menu items.
+Ya tenemos listo el `SidebarComponent`, en el repositorio he agregado unos eventos `onClick` y un `state` para hacerlo interactivo y poder ir seleccionado los diferentes items.
 
 ### MainComponent (App.js)
-Now we only need to work in `App.js`, as we said, has the following structure:
+Ahora solo hace falta trabajar en nuestro `App.js`, que como habiamos dicho antes tiene la siguiente estructura:
 ```
 1- Sidebar
 2- Main Block
@@ -204,7 +204,7 @@ Now we only need to work in `App.js`, as we said, has the following structure:
     4- Content
 ```
 
-It can be defined as follows:
+Y podemos definirlo de la siguiente manera:
 ```
 <Row className={css(styles.container)}>
     <SidebarComponent />
@@ -217,11 +217,11 @@ It can be defined as follows:
 </Row>
 ```
 
-Styles:
+Aqui los estilos:
 
 ```javascript
 container: {
-    height: '100vh' // menu has to take all the height of the screen
+    height: '100vh' // para que el menu ocupe todo el alto de la pantalla
 },
 content: {
     marginTop: 54
@@ -231,10 +231,10 @@ mainBlock: {
     padding: 30
 }
 ```
-[View full file: App.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/App.js)
+[Ver archivo completo: App.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/App.js)
 
 #### HeaderComponent.js
-To finish, we will define the Header, with the following structure.
+Por ultimo, definiremos el Header, con la siguiente estructura.
 ```
 1- Row ({ vertical: center, horizontal: space-between })
     2- Title
@@ -267,7 +267,7 @@ To finish, we will define the Header, with the following structure.
 </Row>
 ```
 
-Header styles:
+y estos estilos:
 
 ```javascript
 avatar: {
@@ -308,7 +308,7 @@ title: {
     letterSpacing: 0.3
 }
 ```
-[View full file: HeaderComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/header/HeaderComponent.js)
+[Ver archivo completo: HeaderComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/master/src/components/header/HeaderComponent.js)
 
 License
 -------
