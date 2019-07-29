@@ -7,7 +7,8 @@ import './App.css';
 
 const styles = StyleSheet.create({
     container: {
-        height: '100vh'
+        height: '100%',
+        minHeight: '100vh'
     },
     content: {
         marginTop: 54
@@ -21,6 +22,16 @@ const styles = StyleSheet.create({
 class App extends React.Component {
 
     state = { selectedItem: 'Tickets' };
+
+    componentDidMount() {
+        window.addEventListener('resize', this.resize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resize);
+    }
+
+    resize = () => this.forceUpdate();
 
     render() {
         const { selectedItem } = this.state;
