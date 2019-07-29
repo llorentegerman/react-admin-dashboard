@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/react-admin-dashboard/static/css/main.0bc4455c.chunk.css",
-    "main.js": "/react-admin-dashboard/static/js/main.49987f13.chunk.js",
-    "main.js.map": "/react-admin-dashboard/static/js/main.49987f13.chunk.js.map",
+    "main.js": "/react-admin-dashboard/static/js/main.32c2bec4.chunk.js",
+    "main.js.map": "/react-admin-dashboard/static/js/main.32c2bec4.chunk.js.map",
     "runtime~main.js": "/react-admin-dashboard/static/js/runtime~main.2bc0138f.js",
     "runtime~main.js.map": "/react-admin-dashboard/static/js/runtime~main.2bc0138f.js.map",
-    "static/js/2.ca5bed68.chunk.js": "/react-admin-dashboard/static/js/2.ca5bed68.chunk.js",
-    "static/js/2.ca5bed68.chunk.js.map": "/react-admin-dashboard/static/js/2.ca5bed68.chunk.js.map",
+    "static/js/2.bb14d6c7.chunk.js": "/react-admin-dashboard/static/js/2.bb14d6c7.chunk.js",
+    "static/js/2.bb14d6c7.chunk.js.map": "/react-admin-dashboard/static/js/2.bb14d6c7.chunk.js.map",
     "index.html": "/react-admin-dashboard/index.html",
-    "precache-manifest.642efd9c905d8814ed17674d21b2b370.js": "/react-admin-dashboard/precache-manifest.642efd9c905d8814ed17674d21b2b370.js",
+    "precache-manifest.d3fe8b4d36ee6ff4394783935bd79349.js": "/react-admin-dashboard/precache-manifest.d3fe8b4d36ee6ff4394783935bd79349.js",
     "service-worker.js": "/react-admin-dashboard/service-worker.js",
     "static/css/main.0bc4455c.chunk.css.map": "/react-admin-dashboard/static/css/main.0bc4455c.chunk.css.map"
   }
