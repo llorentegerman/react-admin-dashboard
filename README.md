@@ -404,6 +404,15 @@ Here is the new version of `SidebarComponent`:
 </div>
 ```
 
+and here is the `renderBurger` method:
+```
+renderBurger = () => {
+    return <div onClick={this.toggleMenu} className={css(styles.burgerIcon)}>
+        <IconBurger />
+    </div>
+}
+```
+
 We are wrapping the component inside a `div` with `position: relative`, and that is to allow to the `Sidebar` fill all the screen, otherwise it will looks like this:
 
 ![](http://g.recordit.co/cxsvbwxmEE.gif)
@@ -413,8 +422,7 @@ As you can see, we are using the `breakpoints` property of [simple-flexbox](http
 ```
 <Row
     className={css(styles.mainContainer)}
-    breakpoints={{ 768: css(styles.mainContainerMobile) }}
->
+    breakpoints={{ 768: css(styles.mainContainerMobile) }} >
 ```
 ```
 it means that if `window.innerWidth <= 768` `mainContainerMobile` styles will be applied.
