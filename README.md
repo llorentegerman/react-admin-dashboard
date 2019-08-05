@@ -517,6 +517,682 @@ resize = () => this.forceUpdate();
 
 [View full file: App.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-1-0/src/App.js)
 
+## Responsive Content
+Now we will see how to make the content that appears in the design.
+We want to make it responsive, and we want it to look like this:
+![](http://g.recordit.co/cWkPDhuw0P.gif)
+
+As I said before, we don't have a responsive design to follow, so we will keep it simple, a main breakpoint at **768px**.
+We can identify 3 main sections in the content:
+```
+1- Row of MiniCards
+2- Today's trends (graph + stats)
+3- Row with 2 cards:
+    4- Unresolved tickets
+    5- Tasks
+```
+
+![](https://i.postimg.cc/9fTPpZLv/content1.png)
+
+#### MiniCardComponent.js
+This is a simple Component, just a Column with a `title` and `value`. The content of the column has to be centered.
+```
+function MiniCardComponent({ className = '', title, value }) {
+    const composedClassName = `${css(styles.container)} ${className}`; // we could receive some styles from props
+    return (
+        <Column flexGrow={1} className={composedClassName} horizontal="center" vertical="center">
+            <span className={css(styles.title)}>{title}</span>
+            <span className={css(styles.value)}>{value}</span>
+        </Column>
+    );
+}
+```
+
+styles:
+```javascript
+container: {
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #DFE0EB',
+    borderRadius: 4,
+    cursor: 'pointer',
+    height: 70,
+    maxWidth: 350,
+    marginRight: 30,
+    padding: '24px 32px 24px 32px',
+    ':hover': {
+        borderColor: '#3751FF',
+        ':nth-child(n) > span': {
+            color: '#3751FF'
+        }
+    }
+},
+title: {
+    color: '#9FA2B4',
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 19,
+    lineHeight: '24px',
+    letterSpacing: '0.4px',
+    marginBottom: 12,
+    minWidth: 102,
+    textAlign: 'center'
+},
+value: {
+    color: '#252733',
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 40,
+    letterSpacing: '1px',
+    lineHeight: '50px',
+    textAlign: 'center'
+}
+```
+
+Pay attention to the `container` styles, on `:hover` we want to change the `borderColor` and `fontColor` of `title` and `value`, but, by default `aphrodite` sets the styles as `!important` so, we cannot change the styles of the children (`title`, `value`) from their parent (`container`). To be able to do that we have to import `aphrodite` in a differnet way than we normally do.
+```
+import { StyleSheet, css } from 'aphrodite/no-important';
+```
+Now we can overwrite the styles of the `children` from their `parents`.
+
+[View full file: MiniCardComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/MiniCardComponent.js)
+
+
+#### TodayTrendsComponent.js
+This component is a `Row` with the following structure:
+```
+1- Column
+    3- Row ({ horizontal: space-between })
+        5- Column with title and subtitle
+        6- legend
+    4- Chart
+2- Column: list of stats
+```
+
+![](https://i.postimg.cc/qqFndxQB/todaystrends.png)
+
+It can be defined as follows:
+```
+<Row flexGrow={1} className={css(styles.container)}
+    horizontal="center" breakpoints={{ 1024: 'column' }}>
+    <Column wrap flexGrow={7} flexBasis="735px" className={css(styles.graphSection)}
+        breakpoints={{ 1024: { width: 'calc(100% - 48px)', flexBasis: 'auto' } }}>
+        <Row wrap horizontal="space-between">
+            <Column>
+                <span className={css(styles.graphTitle)}>Today’s trends</span>
+                <span className={css(styles.graphSubtitle)}>as of 25 May 2019, 09:41 PM</span>
+            </Column>
+            {this.renderLegend('#3751FF', 'Today')}
+        </Row>
+        <div className={css(styles.graphContainer)}>
+            <LineChart
+                data={data}
+                viewBoxWidth={500}
+                pointsStrokeColor="#3751FF"
+                areaColor="#3751FF"
+                areaVisible={true}
+            />
+        </div>
+    </Column>
+    <Column className={css(styles.separator)} breakpoints={{ 1024: { display: 'none' } }}><div /></Column>
+    <Column flexGrow={3} flexBasis="342px" breakpoints={{ 1024: css(styles.stats) }}>
+        {this.renderStat('Resolved', '449')}
+        {this.renderStat('Received', '426')}
+        {this.renderStat('Average first response time', '33m')}
+        {this.renderStat('Average response time', '3h 8m')}
+        {this.renderStat('Resolution within SLA', '94%')}
+    </Column>
+</Row>
+```
+
+where `renderLegend` and `renderStat` are defined as follows:
+
+```
+renderLegend(color, title) {
+    return (<Row vertical="center">
+        <div style={{ width: 16, border: '2px solid', borderColor: color }}></div>
+        <span className={css(styles.legendTitle)}>{title}</span>
+    </Row>);
+}
+
+renderStat(title, value) {
+    return (<Column flexGrow={1} className={css(styles.statContainer)} vertical="center" horizontal="center">
+        <span className={css(styles.statTitle)}>{title}</span>
+        <span className={css(styles.statValue)}>{value}</span>
+    </Column>);
+}
+```
+
+for the `chart` I have used `react-svg-line-chart`, to install it, just type:
+```javascript
+yarn add react-svg-line-chart
+```
+
+and these are the styles:
+```javascript
+container: {
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #DFE0EB',
+    borderRadius: 4,
+    cursor: 'pointer'
+},
+graphContainer: {
+    marginTop: 24,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%'
+},
+graphSection: {
+    padding: 24
+},
+graphSubtitle: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: '16px',
+    letterSpacing: '0.1px',
+    color: '#9FA2B4',
+    marginTop: 4,
+    marginRight: 8
+},
+graphTitle: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 19,
+    lineHeight: '24px',
+    letterSpacing: '0.4px',
+    color: '#252733'
+},
+legendTitle: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 12,
+    lineHeight: '15px',
+    letterSpacing: '0.1px',
+    color: '#9FA2B4',
+    marginLeft: 8
+},
+separator: {
+    backgroundColor: '#DFE0EB',
+    width: 1,
+    minWidth: 1,
+},
+statContainer: {
+    borderBottom: '1px solid #DFE0EB',
+    padding: '24px 32px 24px 32px',
+    height: 'calc(114px - 48px)',
+    ':last-child': {
+        border: 'none'
+    }
+},
+stats: {
+    borderTop: '1px solid #DFE0EB',
+    width: '100%'
+},
+statTitle: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 16,
+    lineHeight: '22px',
+    letterSpacing: '0.3px',
+    textAlign: 'center',
+    color: '#9FA2B4',
+    whiteSpace: 'nowrap',
+    marginBottom: 6
+},
+statValue: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 24,
+    lineHeight: '30px',
+    letterSpacing: '0.3px',
+    textAlign: 'center',
+    color: '#252733'
+}
+```
+
+Notice that `container` will become a `column` when `window.innerWidth <= 1024`, so the `stats` column will be stacked under the `graph`. At same size the `separator` will disappear, and `graph` and `stats` will fill the whole width.
+Pay attention to `statContainer` style, where we are setting borders for every `child` except for the last.
+
+[View full file: TodayTrendsComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/TodayTrendsComponent.js)
+
+
+#### CardComponent.js
+As I said before, the 3rd section of the `content` page is a `Row` with 2 component. These components have many similar characteristics, so we can abstract the design like this:
+
+```
+1- Container (column)
+    2- Row: 
+        3- Column: title and subtitle (received by props)
+        4- Link (view details or view all)
+    5- List of items (received by props)
+```
+
+Code:
+```
+<Column flexGrow={1} className={css(styles.container, containerStyles)} breakpoints={{ 426: css(styles.containerMobile) }}>
+    <Row horizontal="space-between">
+        <Column>
+            <span className={css(styles.title)}>{title}</span>
+            <Row style={{ marginTop: 8, marginBottom: 16 }}>
+                <span className={css(styles.subtitle)}>{subtitle}</span>
+                {subtitleTwo && <span className={css(styles.subtitle, styles.subtitle2)}>{subtitleTwo}</span>}
+            </Row>
+        </Column>
+        <span className={css(styles.link)}>{link}</span>
+    </Row>
+    {items.map(this.renderItem)}
+</Column>
+```
+
+`renderItem`:
+```
+renderItem(item, index) {
+    return (<Column flexGrow={1} className={css(styles.itemContainer)} key={`item-${index}`}
+        breakpoints={{ 426: css(styles.itemContainerMobile) }}>
+        {item}
+    </Column>);
+}
+```
+
+styles:
+```javascript
+container: {
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #DFE0EB',
+    borderRadius: 4,
+    padding: '24px 32px 12px 32px'
+},
+containerMobile: {
+    padding: '12px 16px 6px 16px !important'
+},
+itemContainer: {
+    marginLeft: -32,
+    marginRight: -32,
+    paddingLeft: 32,
+    paddingRight: 32,
+    paddingBottom: 18,
+    paddingTop: 18,
+    maxHeight: 22,
+    borderBottom: '1px solid #DFE0EB',
+    ':last-child': {
+        borderBottom: 'none'
+    }
+},
+itemContainerMobile: {
+    marginLeft: -16,
+    marginRight: -16,
+    paddingLeft: 16,
+    paddingRight: 16
+},
+link: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: '20px',
+    letterSpacing: '0.2px',
+    color: '#3751FF',
+    textAlign: 'right',
+    cursor: 'pointer'
+},
+subtitle: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    lineHeight: '16px',
+    letterSpacing: '0.1px',
+    color: '#9FA2B4'
+},
+subtitle2: {
+    color: '#252733',
+    marginLeft: 2
+},
+title: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 19,
+    lineHeight: '24px',
+    letterSpacing: '0.4px',
+    color: '#252733'
+}
+```
+
+See in `itemContainer` that all items will have `border` except the last one.
+
+[View full file: CardComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/CardComponent.js)
+
+
+#### UnresolvedTicketsComponent.js
+This component will be done based on `CardComponent`, it will look like this:
+```
+<CardComponent containerStyles={this.props.containerStyles} title="Unresolved tickets"
+    link="View details" subtitle="Group:" subtitleTwo="Support"
+    items={[
+        this.renderStat('Waiting on Feature Request', 4238),
+        this.renderStat('Awaiting Customer Response', 1005),
+        this.renderStat('Awaiting Developer Fix', 914),
+        this.renderStat('Pending', 281)
+    ]}
+/>
+```
+
+where `renderStat` is:
+```
+renderStat(title, value) {
+    return (<Row flexGrow={1} horizontal="space-between" vertical="center">
+        <span className={css(styles.itemTitle)}>{title}</span>
+        <span className={css(styles.itemTitle, styles.itemValue)}>{value}</span>
+    </Row>);
+}
+```
+
+We need styles only for the `title` and `value`, all the others are set in `CardComponent`:
+```javascript
+itemTitle: {
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    lineHeight: '20px',
+    letterSpacing: '0.2px',
+    color: '#252733'
+},
+itemValue: {
+    color: '#9FA2B4'
+}
+```
+
+[View full file: UnresolvedTicketsComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/UnresolvedTicketsComponent.js)
+
+
+#### TasksComponent.js
+As `UnresolvedTicketsComponent`, this component will be done based on `CardComponent`, it will look like this:
+```
+<CardComponent containerStyles={this.props.containerStyles} title="Tasks" link="View all" subtitle="Today"
+    items={[
+        <Row horizontal="space-between" vertical="center">
+            <span className={css(styles.itemTitle, styles.greyTitle)}>Create new task</span>
+            {this.renderAddButton()}
+        </Row>,
+        ...this.state.items.map(this.renderTask)
+    ]}
+/>
+```
+
+As you can see, the first item looks different from the others, it has a `gray title` and the `add button`. The rest of the items are stored in the state:
+```javascript
+state = { items: [
+    {title: 'Finish ticket update', checked: false, tag: TAGS.URGENT },
+    {title: 'Create new ticket example', checked: false, tag: TAGS.NEW },
+    {title: 'Update ticket report', checked: true, tag: TAGS.DEFAULT }
+]};
+```
+
+These are the possible TAGS:
+
+```javascript
+const TAGS = {
+    URGENT: { text: 'URGENT', backgroundColor: '#FEC400', color: '#FFFFFF' },
+    NEW: { text: 'NEW', backgroundColor: '#29CC97', color: '#FFFFFF' },
+    DEFAULT: { text: 'DEFAULT', backgroundColor: '#F0F1F7', color: '#9FA2B4' },
+}
+```
+
+and this is the `renderTask` function that will use other 2 functions: `renderTag` and `renderCheckbox`:
+```
+renderTask = ({title, tag = {} }, index) => (
+    <Row horizontal="space-between" vertical="center">
+        <Row>
+            {this.renderCheckbox(index)}
+            <span className={css(styles.itemTitle)}>{title}</span>
+        </Row>
+        {this.renderTag(tag, index)}
+    </Row>
+);
+
+renderTag = ({ text, backgroundColor, color }, index) => (
+    <Row horizontal="center" vertical="center" style={{ backgroundColor, color }}
+        className={css(styles.tagStyles)}>
+        {text}
+    </Row>
+);
+
+renderCheckbox = (index) => <div className={css(styles.checkboxWrapper)}>
+    {this.state.items[index].checked ? <CheckboxOn /> : <CheckboxOff />}
+</div>;
+```
+
+For the `checkbox` we are using two new icons that you can copy from here: [checkbox-on](https://github.com/llorentegerman/react-admin-dashboard/tree/v1-2-0/src/assets/checkbox-on.js) and [checkbox-off](https://github.com/llorentegerman/react-admin-dashboard/tree/v1-2-0/src/assets/checkbox-off.js),
+
+These are the styles:
+```javascript
+addButton: {
+    backgroundColor: '#F0F1F7',
+    color: '#9FA2B4',
+    fontSize: 20,
+    padding: 7
+},
+itemTitle: {
+    color: '#252733',
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 14,
+    letterSpacing: '0.2px',
+    lineHeight: '20px'
+},
+itemValue: {
+    color: '#9FA2B4'
+},
+greyTitle: {
+    color: '#C5C7CD'
+},
+tagStyles: {
+    borderRadius: 5,
+    cursor: 'pointer',
+    fontFamily: 'Muli',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 11,
+    letterSpacing: '0.5px',
+    lineHeight: '14px',
+    padding: '5px 12px 5px 12px'
+},
+checkboxWrapper: {
+    cursor: 'pointer',
+    marginRight: 16
+}
+```
+
+You can see in the repository code that I added some events to do this component interactive.
+
+[View full file: TasksComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/TasksComponent.js)
+
+#### ContentComponent.js
+Now we have to combine these components into one. As I said before is a `Column` with 3 sections:
+```
+1- Row of MiniCardComponent
+2- TodayTrendsComponent
+3- Row with 2 components:
+    4- UnresolvedTicketsComponent
+    5- TasksComponent
+```
+
+The first section is probably the most complex, because we have to combine some styles. We have 4 `cards`, and we always want the same number of cards in each row regardless of the width of the screen. That is:
+- 4 cards in a row, or
+- 2 cards in each row, in two different rows, or
+- 1 card in each row, in four different rows
+![](http://g.recordit.co/5zjnfmBsgN.gif)
+
+but we don't want something like this:
+![](http://g.recordit.co/Lf6xgHPzEO.gif)
+
+I think it's a good idea if we group them into pairs in this way:
+```
+<Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
+    <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
+        <MiniCardComponent className={css(styles.miniCardContainer)} title="Unresolved" value="60" />
+        <MiniCardComponent className={css(styles.miniCardContainer)} title="Overdue" value="16" />
+    </Row>
+    <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
+        <MiniCardComponent className={css(styles.miniCardContainer)} title="Open" value="43" />
+        <MiniCardComponent className={css(styles.miniCardContainer)} title="On hold" value="64" />
+    </Row>
+</Row>
+```
+so, when the main `row` is wider than the container, it will be divided into two new `rows`, and so on.
+
+For `TodayTrendsComponent` is easy, we just need to wrap it in a `div` to apply some margins.
+
+```
+<div className={css(styles.todayTrends)}>
+    <TodayTrendsComponent />
+</div>
+```
+
+and the last section is a `row` with `UnresolvedTicketsComponent` and `TasksComponent` that will become a `column` when `window.innerWidth <= 1024`,
+```
+<Row horizontal="space-between" className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
+    <UnresolvedTicketsComponent containerStyles={styles.unresolvedTickets} />
+    <TasksComponent containerStyles={styles.tasks} />
+</Row>
+```
+
+here is the full code:
+```
+<Column>
+    <Row className={css(styles.cardsContainer)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 768: 'column' }}>
+        <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
+            <MiniCardComponent className={css(styles.miniCardContainer)} title="Unresolved" value="60" />
+            <MiniCardComponent className={css(styles.miniCardContainer)} title="Overdue" value="16" />
+        </Row>
+        <Row className={css(styles.cardRow)} wrap flexGrow={1} horizontal="space-between" breakpoints={{ 384: 'column' }}>
+            <MiniCardComponent className={css(styles.miniCardContainer)} title="Open" value="43" />
+            <MiniCardComponent className={css(styles.miniCardContainer)} title="On hold" value="64" />
+        </Row>
+    </Row>
+    <div className={css(styles.todayTrends)}>
+        <TodayTrendsComponent />
+    </div>
+    <Row horizontal="space-between" className={css(styles.lastRow)} breakpoints={{ 1024: 'column' }}>
+        <UnresolvedTicketsComponent containerStyles={styles.unresolvedTickets} />
+        <TasksComponent containerStyles={styles.tasks} />
+    </Row>
+</Column>
+```
+
+styles:
+```javascript
+cardsContainer: {
+    marginRight: -30,
+    marginTop: -30
+},
+cardRow: {
+    marginTop: 30,
+    '@media (max-width: 768px)': {
+        marginTop: 0
+    }
+},
+miniCardContainer: {
+    flexGrow: 1,
+    marginRight: 30,
+    '@media (max-width: 768px)': {
+        marginTop: 30,
+        maxWidth: 'none'
+    }
+},
+todayTrends: {
+    marginTop: 30
+},
+lastRow: {
+    marginTop: 30
+},
+unresolvedTickets: {
+    marginRight: 30,
+    '@media (max-width: 1024px)': {
+        marginRight: 0
+    }
+},
+tasks: {
+    marginTop: 0,
+    '@media (max-width: 1024px)': {
+        marginTop: 30,
+    }
+}
+```
+
+pay attention to the negative margins of `cardsContainer` as they will absorb the excess margins of the elements that are located on the edges, to avoid this kind of things:
+![](https://i.postimg.cc/VNmVvp3V/content2.png)
+
+[View full file: ContentComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/ContentComponent.js)
+
+
+#### MainComponent (App.js)
+To finish we have to include the `ContentComponent` in our `MainComponent`
+```
+<Row className={css(styles.container)}>
+    <SidebarComponent selectedItem={selectedItem} onChange={(selectedItem) => this.setState({ selectedItem })} />
+    <Column flexGrow={1} className={css(styles.mainBlock)}>
+        <HeaderComponent title={selectedItem} />
+        <div className={css(styles.content)}>
+            <ContentComponent />
+        </div>
+    </Column>
+</Row>
+```
+
+[View the changes: App.js](https://github.com/llorentegerman/react-admin-dashboard/compare/v1-1-0...v1-2-0#diff-14b1e33d5bf5649597cdc0e4f684dadd)
+
+[View full file: App.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/content/App.js)
+
+#### SidebarComponent,js (important fix)
+We have to include a change to our `Sidebar`, because at the moment, a transparent layer is filling all the screen on mobile so we cannot click any element.
+We are applying these styles to the `mainContainerMobile`:
+```javascript
+ mainContainerMobile: {
+    ...
+    width: '100%',
+    minWidth: '100vh',
+}
+```
+but we want those styles only when the `Sidebar` is `expanded`, so we will apply these changes to our component:
+```
+<div style={{ position: 'relative' }}>
+    <Row className={css(styles.mainContainer)}
+        breakpoints={{ 768: css(styles.mainContainerMobile, expanded && styles.mainContainerExpanded) }}>
+        ...
+    </Row>
+</div>
+```
+
+styles:
+```javascript
+...
+mainContainerMobile: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+},
+mainContainerExpanded: {
+    width: '100%',
+    minWidth: '100vh',
+}
+...
+```
+
+[View the changes: SidebarComponent.js](https://github.com/llorentegerman/react-admin-dashboard/compare/v1-1-0...v1-2-0#diff-c83e6c47084049d5b258f003efdd1b8e)
+
+[View full file: SidebarComponent.js](https://github.com/llorentegerman/react-admin-dashboard/blob/v1-2-0/src/components/sidebar/SidebarComponent.js)
+
 License
 -------
 This software is released under the [MIT License](https://github.com/llorentegerman/react-admin-dashboard/blob/master/LICENSE).
