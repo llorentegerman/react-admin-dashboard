@@ -3,6 +3,7 @@ import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import SidebarComponent from './components/sidebar/SidebarComponent';
 import HeaderComponent from './components/header/HeaderComponent';
+import ContentComponent from './components/content/ContentComponent';
 import './App.css';
 
 const styles = StyleSheet.create({
@@ -41,7 +42,7 @@ class App extends React.Component {
                 <Column flexGrow={1} className={css(styles.mainBlock)}>
                     <HeaderComponent title={selectedItem} />
                     <div className={css(styles.content)}>
-                        <span>Content</span>
+                        <ContentComponent />
                     </div>
                 </Column>
             </Row>
