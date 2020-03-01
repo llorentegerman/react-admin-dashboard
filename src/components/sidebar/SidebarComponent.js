@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
 import LogoComponent from './LogoComponent';
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     },
     mainContainerExpanded: {
         width: '100%',
-        minWidth: '100vh',
+        minWidth: '100vh'
     },
     menuItemList: {
         marginTop: 52
@@ -71,77 +71,124 @@ const styles = StyleSheet.create({
     }
 });
 
-class SidebarComponent extends React.Component {
+function SidebarComponent({ onChange, selectedItem }) {
+    const [expanded, setExpanded] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const input1 = useRef(null);
 
-    state = { expanded: false };
+    const [, updateState] = React.useState();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
-    onItemClicked = (item) => {
-        this.setState({ expanded: false });
-        return this.props.onChange(item);
-    }
+    /**
+     * This is to fix this issue:
+     * https://github.com/llorentegerman/react-admin-dashboard/issues/8
+     * I haven't been able to reproduce this bug in Safari 13.0.5 (14608.5.12)
+     */
+    useEffect(() => {
+        setIsMobile(window.innerWidth <= 768);
+        forceUpdate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [window.innerWidth]);
 
-    isMobile = () => window.innerWidth <= 768;
+    const onItemClicked = item => {
+        setExpanded(false);
+        return onChange(item);
+    };
 
-    toggleMenu = () => this.setState(prevState => ({ expanded: !prevState.expanded }));
+    const toggleMenu = () => setExpanded(!expanded);
 
-    renderBurger = () => {
-        return <div onClick={this.toggleMenu} className={css(styles.burgerIcon)}>
-            <IconBurger />
-        </div>
-    }
-
-    render() {
-        const { expanded } = this.state;
-        const isMobile = this.isMobile();
+    const renderBurger = () => {
         return (
-            <div style={{ position: 'relative' }}>
-                <Row className={css(styles.mainContainer)} breakpoints={{ 768: css(styles.mainContainerMobile, expanded && styles.mainContainerExpanded) }}>
-                    {(isMobile && !expanded) && this.renderBurger()}
-                    <Column className={css(styles.container)} breakpoints={{ 768: css(styles.containerMobile, expanded ? styles.show : styles.hide) }}>
-                        <LogoComponent />
-                        <Column className={css(styles.menuItemList)}>
-                            <MenuItemComponent
-                                title="Overview" icon={IconOverview}
-                                onClick={() => this.onItemClicked('Overview')}
-                                active={this.props.selectedItem === 'Overview'}
-                            />
-                            <MenuItemComponent
-                                title="Tickets" icon={IconTickets}
-                                onClick={() => this.onItemClicked('Tickets')}
-                                active={this.props.selectedItem === 'Tickets'}
-                            />
-                            <MenuItemComponent
-                                title="Ideas" icon={IconIdeas}
-                                onClick={() => this.onItemClicked('Ideas')}
-                                active={this.props.selectedItem === 'Ideas'} />
-                            <MenuItemComponent
-                                title="Contacts" icon={IconContacts}
-                                onClick={() => this.onItemClicked('Contacts')}
-                                active={this.props.selectedItem === 'Contacts'} />
-                            <MenuItemComponent
-                                title="Agents" icon={IconAgents}
-                                onClick={() => this.onItemClicked('Agents')}
-                                active={this.props.selectedItem === 'Agents'} />
-                            <MenuItemComponent
-                                title="Articles" icon={IconArticles}
-                                onClick={() => this.onItemClicked('Articles')}
-                                active={this.props.selectedItem === 'Articles'} />
-                            <div className={css(styles.separator)}></div>
-                            <MenuItemComponent
-                                title="Settings" icon={IconSettings}
-                                onClick={() => this.onItemClicked('Settings')}
-                                active={this.props.selectedItem === 'Settings'} />
-                            <MenuItemComponent
-                                title="Subscription" icon={IconSubscription}
-                                onClick={() => this.onItemClicked('Subscription')}
-                                active={this.props.selectedItem === 'Subscription'} />
-                        </Column>
-                    </Column>
-                    {isMobile && expanded && <div className={css(styles.outsideLayer)} onClick={this.toggleMenu}></div>}
-                </Row>
+            <div onClick={toggleMenu} className={css(styles.burgerIcon)}>
+                <IconBurger />
             </div>
         );
     };
+
+    return (
+        <div style={{ position: 'relative' }}>
+            <Row
+                componentRef={element => (input1.current = element)}
+                className={css(styles.mainContainer)}
+                breakpoints={{
+                    768: css(
+                        styles.mainContainerMobile,
+                        expanded && styles.mainContainerExpanded
+                    )
+                }}
+            >
+                {isMobile && !expanded && renderBurger()}
+                <Column
+                    className={css(styles.container)}
+                    breakpoints={{
+                        768: css(
+                            styles.containerMobile,
+                            expanded ? styles.show : styles.hide
+                        )
+                    }}
+                >
+                    <LogoComponent />
+                    <Column className={css(styles.menuItemList)}>
+                        <MenuItemComponent
+                            title="Overview"
+                            icon={IconOverview}
+                            onClick={() => onItemClicked('Overview')}
+                            active={selectedItem === 'Overview'}
+                        />
+                        <MenuItemComponent
+                            title="Tickets"
+                            icon={IconTickets}
+                            onClick={() => onItemClicked('Tickets')}
+                            active={selectedItem === 'Tickets'}
+                        />
+                        <MenuItemComponent
+                            title="Ideas"
+                            icon={IconIdeas}
+                            onClick={() => onItemClicked('Ideas')}
+                            active={selectedItem === 'Ideas'}
+                        />
+                        <MenuItemComponent
+                            title="Contacts"
+                            icon={IconContacts}
+                            onClick={() => onItemClicked('Contacts')}
+                            active={selectedItem === 'Contacts'}
+                        />
+                        <MenuItemComponent
+                            title="Agents"
+                            icon={IconAgents}
+                            onClick={() => onItemClicked('Agents')}
+                            active={selectedItem === 'Agents'}
+                        />
+                        <MenuItemComponent
+                            title="Articles"
+                            icon={IconArticles}
+                            onClick={() => onItemClicked('Articles')}
+                            active={selectedItem === 'Articles'}
+                        />
+                        <div className={css(styles.separator)}></div>
+                        <MenuItemComponent
+                            title="Settings"
+                            icon={IconSettings}
+                            onClick={() => onItemClicked('Settings')}
+                            active={selectedItem === 'Settings'}
+                        />
+                        <MenuItemComponent
+                            title="Subscription"
+                            icon={IconSubscription}
+                            onClick={() => onItemClicked('Subscription')}
+                            active={selectedItem === 'Subscription'}
+                        />
+                    </Column>
+                </Column>
+                {isMobile && expanded && (
+                    <div
+                        className={css(styles.outsideLayer)}
+                        onClick={toggleMenu}
+                    ></div>
+                )}
+            </Row>
+        </div>
+    );
 }
 
 export default SidebarComponent;
