@@ -7,10 +7,12 @@
         "aphrodite": "^2.3.1",
         "prop-types": "^15.7.2",
         "react": "^16.8.6",
+        "react-burger-menu": "^2.6.13",
         "react-dom": "^16.8.6",
         "react-scripts": "3.0.1",
         "react-svg-line-chart": "^2.0.1",
-        "simple-flexbox": "^2.3.1"
+        "simple-flexbox": "^2.3.1",
+        "react-collapsible-content": "^1.0.0"
     },
     "scripts": {
         "start": "react-scripts start",

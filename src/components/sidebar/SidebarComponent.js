@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Column, Row } from 'simple-flexbox';
+import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 import LogoComponent from './LogoComponent';
 import MenuItemComponent from './MenuItemComponent';
@@ -11,183 +10,198 @@ import IconAgents from '../../assets/icon-agents';
 import IconArticles from '../../assets/icon-articles';
 import IconSettings from '../../assets/icon-settings';
 import IconSubscription from '../../assets/icon-subscription';
-import IconBurger from '../../assets/icon-burger';
+import { slide as Menu } from 'react-burger-menu';
+import useSidebar from './useSidebar';
 
-const styles = StyleSheet.create({
-    burgerIcon: {
-        cursor: 'pointer',
-        position: 'absolute',
-        left: 24,
-        top: 34
-    },
-    container: {
-        backgroundColor: '#363740',
-        width: 255,
-        paddingTop: 32,
-        height: 'calc(100% - 32px)'
-    },
-    containerMobile: {
-        transition: 'left 0.5s, right 0.5s',
-        position: 'absolute',
-        width: 255,
-        height: 'calc(100% - 32px)',
-        zIndex: 901
-    },
-    mainContainer: {
-        height: '100%',
-        minHeight: '100vh'
-    },
-    mainContainerMobile: {
-        position: 'absolute',
-        top: 0,
-        left: 0
-    },
-    mainContainerExpanded: {
-        width: '100%',
-        minWidth: '100vh'
-    },
-    menuItemList: {
-        marginTop: 52
-    },
-    outsideLayer: {
-        position: 'absolute',
-        width: '100vw',
-        minWidth: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0,0,0,.50)',
-        zIndex: 900
-    },
+const stylesSeparator = StyleSheet.create({
     separator: {
         borderTop: '1px solid #DFE0EB',
         marginTop: 16,
         marginBottom: 16,
         opacity: 0.06
-    },
-    hide: {
-        left: -255
-    },
-    show: {
-        left: 0
     }
 });
 
-function SidebarComponent({ onChange, selectedItem }) {
-    const [expanded, setExpanded] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-    const input1 = useRef(null);
+const styles = {
+    bmBurgerButton: {
+        position: 'absolute',
+        width: 26,
+        height: 20,
+        left: 24,
+        top: 20
+    },
+    bmBurgerBars: {
+        background: '#373a47'
+    },
+    bmBurgerBarsHover: {
+        background: '#a90000'
+    },
+    bmCrossButton: {
+        display: 'none'
+    },
+    bmCross: {
+        background: '#bdc3c7'
+    },
+    bmMenuWrap: {
+        position: 'fixed',
+        height: '100%',
+        width: 255
+    },
+    bmMenu: {
+        background: '#373a47'
+    },
+    bmItem: {
+        outline: 'none',
+        ':focus': {
+            outline: 'none'
+        }
+    },
+    bmMorphShape: {
+        fill: '#373a47'
+    },
+    bmOverlay: {
+        background: 'rgba(0, 0, 0, 0.3)'
+    }
+};
 
-    const [, updateState] = React.useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
+function SidebarComponent() {
+    const {
+        isOpen,
+        isExpanded,
+        isActive,
+        onMenuItemClicked,
+        setIsOpen
+    } = useSidebar({ defaultPath: '/ideas' });
 
-    /**
-     * This is to fix this issue:
-     * https://github.com/llorentegerman/react-admin-dashboard/issues/8
-     * I haven't been able to reproduce this bug in Safari 13.0.5 (14608.5.12)
-     */
-    useEffect(() => {
-        setIsMobile(window.innerWidth <= 768);
-        forceUpdate();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [window.innerWidth]);
-
-    const onItemClicked = item => {
-        setExpanded(false);
-        return onChange(item);
-    };
-
-    const toggleMenu = () => setExpanded(!expanded);
-
-    const renderBurger = () => {
-        return (
-            <div onClick={toggleMenu} className={css(styles.burgerIcon)}>
-                <IconBurger />
-            </div>
-        );
-    };
+    const isMobile = window.innerWidth <= 1080;
 
     return (
-        <div style={{ position: 'relative' }}>
-            <Row
-                componentRef={element => (input1.current = element)}
-                className={css(styles.mainContainer)}
-                breakpoints={{
-                    768: css(
-                        styles.mainContainerMobile,
-                        expanded && styles.mainContainerExpanded
-                    )
-                }}
-            >
-                {isMobile && !expanded && renderBurger()}
-                <Column
-                    className={css(styles.container)}
-                    breakpoints={{
-                        768: css(
-                            styles.containerMobile,
-                            expanded ? styles.show : styles.hide
-                        )
-                    }}
-                >
-                    <LogoComponent />
-                    <Column className={css(styles.menuItemList)}>
-                        <MenuItemComponent
-                            title="Overview"
-                            icon={IconOverview}
-                            onClick={() => onItemClicked('Overview')}
-                            active={selectedItem === 'Overview'}
-                        />
-                        <MenuItemComponent
-                            title="Tickets"
-                            icon={IconTickets}
-                            onClick={() => onItemClicked('Tickets')}
-                            active={selectedItem === 'Tickets'}
-                        />
-                        <MenuItemComponent
-                            title="Ideas"
-                            icon={IconIdeas}
-                            onClick={() => onItemClicked('Ideas')}
-                            active={selectedItem === 'Ideas'}
-                        />
-                        <MenuItemComponent
-                            title="Contacts"
-                            icon={IconContacts}
-                            onClick={() => onItemClicked('Contacts')}
-                            active={selectedItem === 'Contacts'}
-                        />
-                        <MenuItemComponent
-                            title="Agents"
-                            icon={IconAgents}
-                            onClick={() => onItemClicked('Agents')}
-                            active={selectedItem === 'Agents'}
-                        />
-                        <MenuItemComponent
-                            title="Articles"
-                            icon={IconArticles}
-                            onClick={() => onItemClicked('Articles')}
-                            active={selectedItem === 'Articles'}
-                        />
-                        <div className={css(styles.separator)}></div>
-                        <MenuItemComponent
-                            title="Settings"
-                            icon={IconSettings}
-                            onClick={() => onItemClicked('Settings')}
-                            active={selectedItem === 'Settings'}
-                        />
-                        <MenuItemComponent
-                            title="Subscription"
-                            icon={IconSubscription}
-                            onClick={() => onItemClicked('Subscription')}
-                            active={selectedItem === 'Subscription'}
-                        />
-                    </Column>
-                </Column>
-                {isMobile && expanded && (
-                    <div
-                        className={css(styles.outsideLayer)}
-                        onClick={toggleMenu}
-                    ></div>
-                )}
-            </Row>
-        </div>
+        <Menu
+            isOpen={!isMobile || isOpen}
+            noOverlay={!isMobile}
+            disableCloseOnEsc
+            styles={styles}
+            onStateChange={state => setIsOpen(state.isOpen)}
+            noTransition={!isMobile}
+        >
+            <div style={{ paddingTop: 30, paddingBottom: 30 }}>
+                <LogoComponent />
+            </div>
+            <MenuItemComponent
+                title="Dashboard"
+                icon={IconSubscription}
+                onClick={() => onMenuItemClicked('/dashboard')}
+                active={isActive('/dashboard')}
+            />
+
+            <MenuItemComponent
+                title="Overview"
+                icon={IconOverview}
+                onClick={() =>
+                    onMenuItemClicked('/overview', { isCollapsible: true })
+                }
+                active={isActive('/overview')}
+                expanded={isExpanded('/overview')}
+                subItems={[
+                    {
+                        title: 'Sub Item 1',
+                        icon: <IconAgents width={20} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/overview/subitem1'),
+                        active: isActive('/overview/subitem1')
+                    },
+                    {
+                        title: 'Sub Item 2',
+                        icon: <IconIdeas width={16} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/overview/subitem2'),
+                        active: isActive('/overview/subitem2')
+                    },
+                    {
+                        title: 'Sub Item 3',
+                        icon: <IconContacts width={16} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/overview/subitem3'),
+                        active: isActive('/overview/subitem3')
+                    },
+                    {
+                        title: 'Sub Item 4',
+                        icon: <IconSettings width={20} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/overview/subitem4'),
+                        active: isActive('/overview/subitem4')
+                    }
+                ]}
+            />
+            <MenuItemComponent
+                title="Tickets"
+                icon={IconTickets}
+                onClick={() => onMenuItemClicked('/tickets')}
+                active={isActive('/tickets')}
+            />
+            <MenuItemComponent
+                title="Ideas"
+                icon={IconIdeas}
+                onClick={() =>
+                    onMenuItemClicked('/ideas', { isCollapsible: true })
+                }
+                active={isActive('/ideas')}
+                expanded={isExpanded('/ideas')}
+                subItems={[
+                    {
+                        title: 'Sub Item 1',
+                        icon: <IconAgents width={20} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/ideas/subitem1'),
+                        active: isActive('/ideas/subitem1')
+                    },
+                    {
+                        title: 'Sub Item 2',
+                        icon: <IconIdeas width={16} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/ideas/subitem2'),
+                        active: isActive('/ideas/subitem2')
+                    },
+                    {
+                        title: 'Sub Item 3',
+                        icon: <IconContacts width={16} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/ideas/subitem3'),
+                        active: isActive('/ideas/subitem3')
+                    },
+                    {
+                        title: 'Sub Item 4',
+                        icon: <IconSettings width={20} fill={'#DDE2FF'} />,
+                        onClick: () => onMenuItemClicked('/ideas/subitem4'),
+                        active: isActive('/ideas/subitem4')
+                    }
+                ]}
+            />
+            <MenuItemComponent
+                title="Contacts"
+                icon={IconContacts}
+                onClick={() => onMenuItemClicked('/contacts')}
+                active={isActive('/contacts')}
+            />
+            <MenuItemComponent
+                title="Agents"
+                icon={IconAgents}
+                onClick={() => onMenuItemClicked('/agents')}
+                active={isActive('/agents')}
+            />
+            <MenuItemComponent
+                title="Articles"
+                icon={IconArticles}
+                onClick={() => onMenuItemClicked('/articles')}
+                active={isActive('/articles')}
+            />
+            <div className={css(stylesSeparator.separator)}></div>
+            <MenuItemComponent
+                title="Settings"
+                icon={IconSettings}
+                onClick={() => onMenuItemClicked('/settings')}
+                active={isActive('/settings')}
+            />
+            <MenuItemComponent
+                title="Subscription"
+                icon={IconSubscription}
+                onClick={() => onMenuItemClicked('/subscription')}
+                active={isActive('/subscription')}
+            />
+        </Menu>
     );
 }
 

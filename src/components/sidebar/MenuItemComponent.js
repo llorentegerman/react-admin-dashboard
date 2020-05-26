@@ -1,30 +1,30 @@
 import React from 'react';
-import { bool, func, string } from 'prop-types';
-import { Row } from 'simple-flexbox';
+import { arrayOf, bool, func, object, string } from 'prop-types';
+import { Column, Row } from 'simple-flexbox';
 import { StyleSheet, css } from 'aphrodite';
+import CollapsibleComponent from 'react-collapsible-content';
+import SubItemComponent from './SubItemComponent';
 
 const styles = StyleSheet.create({
-    activeBar: {
-        height: 56,
-        width: 3,
-        backgroundColor: '#DDE2FF',
-        position: 'absolute',
-        left: 0
-    },
     activeContainer: {
         backgroundColor: 'rgba(221,226,255, 0.08)'
+    },
+    activeBar: {
+        borderLeft: '3px solid #DDE2FF'
     },
     activeTitle: {
         color: '#DDE2FF'
     },
     container: {
+        display: 'flex',
         height: 56,
         cursor: 'pointer',
         ':hover': {
             backgroundColor: 'rgba(221,226,255, 0.08)'
         },
         paddingLeft: 32,
-        paddingRight: 32
+        paddingRight: 32,
+        transition: 'background-color 0.425s ease-in-out'
     },
     title: {
         fontFamily: 'Muli',
@@ -37,20 +37,47 @@ const styles = StyleSheet.create({
 });
 
 function MenuItemComponent(props) {
-    const { active, icon, title, ...otherProps } = props;
+    const { active, expanded, icon, subItems = [], title, onClick } = props;
     const Icon = icon;
+
     return (
-        <Row className={css(styles.container, active && styles.activeContainer)} vertical="center" {...otherProps}>
-            {active && <div className={css(styles.activeBar)}></div>}
-            <Icon fill={active && "#DDE2FF"} opacity={!active && "0.4"} />
-            <span className={css(styles.title, active && styles.activeTitle)}>{title}</span>
-        </Row>
+        <Column>
+            <Row
+                vertical="center"
+                onClick={onClick}
+                className={`${css(
+                    styles.container,
+                    active && styles.activeContainer,
+                    active && styles.activeBar
+                )}`}
+            >
+                <Icon
+                    fill={active ? '#DDE2FF' : '#9FA2B4'}
+                    opacity={!active && '0.4'}
+                />
+                <span
+                    className={css(styles.title, active && styles.activeTitle)}
+                >
+                    {title}
+                </span>
+            </Row>
+            {subItems && subItems.length ? (
+                <CollapsibleComponent title={title} expanded={expanded}>
+                    {subItems.map((s, i) => SubItemComponent({ ...s }, i))}
+                </CollapsibleComponent>
+            ) : (
+                <div></div>
+            )}
+        </Column>
     );
 }
 
 MenuItemComponent.propTypes = {
     active: bool,
+    expanded: bool,
     icon: func,
+    onClick: func,
+    subItems: arrayOf(object),
     title: string
 };
 

@@ -16,12 +16,16 @@ const styles = StyleSheet.create({
     },
     mainBlock: {
         backgroundColor: '#F7F8FC',
-        padding: 30
+        padding: 30,
+        marginLeft: 255,
+        '@media (max-width: 1080px)': {
+            marginLeft: 0,
+            padding: 10
+        }
     }
 });
 
 class App extends React.Component {
-
     state = { selectedItem: 'Tickets' };
 
     componentDidMount() {
@@ -38,7 +42,7 @@ class App extends React.Component {
         const { selectedItem } = this.state;
         return (
             <Row className={css(styles.container)}>
-                <SidebarComponent selectedItem={selectedItem} onChange={(selectedItem) => this.setState({ selectedItem })} />
+                <SidebarComponent />
                 <Column flexGrow={1} className={css(styles.mainBlock)}>
                     <HeaderComponent title={selectedItem} />
                     <div className={css(styles.content)}>

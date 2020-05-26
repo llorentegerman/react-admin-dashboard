@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         width: 35,
         borderRadius: 50,
         marginLeft: 14,
-        border: '1px solid #DFE0EB',
+        border: '1px solid #DFE0EB'
     },
     container: {
         height: 40
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: '30px',
         letterSpacing: 0.3,
-        '@media (max-width: 768px)': {
-            marginLeft: 36
+        '@media (max-width: 1080px)': {
+            marginLeft: 50
         },
         '@media (max-width: 468px)': {
             fontSize: 20
@@ -68,7 +68,12 @@ const styles = StyleSheet.create({
 function HeaderComponent(props) {
     const { icon, title, ...otherProps } = props;
     return (
-        <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
+        <Row
+            className={css(styles.container)}
+            vertical="center"
+            horizontal="space-between"
+            {...otherProps}
+        >
             <span className={css(styles.title)}>{title}</span>
             <Row vertical="center">
                 <div className={css(styles.iconStyles)}>
@@ -79,8 +84,14 @@ function HeaderComponent(props) {
                 </div>
                 <div className={css(styles.separator)}></div>
                 <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>Germán Llorente</span>
-                    <img src="https://avatars3.githubusercontent.com/u/21162888?s=460&v=4" alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
+                    <span className={css(styles.name, styles.cursorPointer)}>
+                        Germán Llorente
+                    </span>
+                    <img
+                        src="https://avatars3.githubusercontent.com/u/21162888?s=460&v=4"
+                        alt="avatar"
+                        className={css(styles.avatar, styles.cursorPointer)}
+                    />
                 </Row>
             </Row>
         </Row>
