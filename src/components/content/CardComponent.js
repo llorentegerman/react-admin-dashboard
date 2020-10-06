@@ -1,8 +1,8 @@
 import React from 'react';
 import { Column, Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite/no-important';
+import { createUseStyles } from 'react-jss';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     container: {
         backgroundColor: '#FFFFFF',
         border: '1px solid #DFE0EB',
@@ -66,33 +66,45 @@ const styles = StyleSheet.create({
     }
 });
 
-class CardComponent extends React.Component {
-
-    renderItem(item, index) {
-        return (<Column flexGrow={1} className={css(styles.itemContainer)} key={`item-${index}`}
-            breakpoints={{ 426: css(styles.itemContainerMobile) }}>
-            {item}
-        </Column>);
-    }
-
-    render() {
-        const { title, link, subtitle, subtitleTwo, items, containerStyles } = this.props;
+function CardComponent(props) {
+    const classes = useStyles();
+    const { title, link, subtitle, subtitleTwo, items, containerStyles } = props;
+    function renderItem(item, index) {
         return (
-            <Column flexGrow={1} className={css(styles.container, containerStyles)} breakpoints={{ 426: css(styles.containerMobile) }}>
-                <Row horizontal="space-between">
-                    <Column>
-                        <span className={css(styles.title)}>{title}</span>
-                        <Row style={{ marginTop: 8, marginBottom: 16 }}>
-                            <span className={css(styles.subtitle)}>{subtitle}</span>
-                            {subtitleTwo && <span className={css(styles.subtitle, styles.subtitle2)}>{subtitleTwo}</span>}
-                        </Row>
-                    </Column>
-                    <span className={css(styles.link)}>{link}</span>
-                </Row>
-                {items.map(this.renderItem)}
+            <Column
+                flexGrow={1}
+                className={classes.itemContainer}
+                key={`item-${index}`}
+                breakpoints={{ 426: classes.itemContainerMobile }}
+            >
+                {item}
             </Column>
         );
     }
+
+    return (
+        <Column
+            flexGrow={1}
+            className={[classes.container, containerStyles].join(' ')}
+            breakpoints={{ 426: classes.containerMobile }}
+        >
+            <Row horizontal='space-between'>
+                <Column>
+                    <span className={classes.title}>{title}</span>
+                    <Row style={{ marginTop: 8, marginBottom: 16 }}>
+                        <span className={classes.subtitle}>{subtitle}</span>
+                        {subtitleTwo && (
+                            <span className={[classes.subtitle, classes.subtitle2].join(' ')}>
+                                {subtitleTwo}
+                            </span>
+                        )}
+                    </Row>
+                </Column>
+                <span className={classes.link}>{link}</span>
+            </Row>
+            {items.map(renderItem)}
+        </Column>
+    );
 }
 
 export default CardComponent;

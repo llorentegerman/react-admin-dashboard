@@ -1,15 +1,15 @@
 import React from 'react';
 import { Column, Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import LineChart from 'react-svg-line-chart'
+import { createUseStyles } from 'react-jss';
+import LineChart from 'react-svg-line-chart';
 
-const data = []
+const data = [];
 
 for (let x = 1; x <= 24; x++) {
-    data.push({ x: x, y: Math.floor(Math.random() * (100)) })
+    data.push({ x: x, y: Math.floor(Math.random() * 100) });
 }
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     container: {
         backgroundColor: '#FFFFFF',
         border: '1px solid #DFE0EB',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     separator: {
         backgroundColor: '#DFE0EB',
         width: 1,
-        minWidth: 1,
+        minWidth: 1
     },
     statContainer: {
         borderBottom: '1px solid #DFE0EB',
@@ -96,56 +96,75 @@ const styles = StyleSheet.create({
     }
 });
 
-class TodayTrendsComponent extends React.Component {
+function TodayTrendsComponent() {
+    const classes = useStyles();
 
-    renderLegend(color, title) {
-        return (<Row vertical="center">
-            <div style={{ width: 16, border: '2px solid', borderColor: color }}></div>
-            <span className={css(styles.legendTitle)}>{title}</span>
-        </Row>);
-    }
-
-    renderStat(title, value) {
-        return (<Column flexGrow={1} className={css(styles.statContainer)} vertical="center" horizontal="center">
-            <span className={css(styles.statTitle)}>{title}</span>
-            <span className={css(styles.statValue)}>{value}</span>
-        </Column>);
-    }
-
-    render() {
+    function renderLegend(color, title) {
         return (
-            <Row flexGrow={1} className={css(styles.container)}
-                horizontal="center" breakpoints={{ 1024: 'column' }}>
-                <Column wrap flexGrow={7} flexBasis="735px" className={css(styles.graphSection)}
-                    breakpoints={{ 1024: { width: 'calc(100% - 48px)', flexBasis: 'auto' } }}>
-                    <Row wrap horizontal="space-between">
-                        <Column>
-                            <span className={css(styles.graphTitle)}>Today’s trends</span>
-                            <span className={css(styles.graphSubtitle)}>as of 25 May 2019, 09:41 PM</span>
-                        </Column>
-                        {this.renderLegend('#3751FF', 'Today')}
-                    </Row>
-                    <div className={css(styles.graphContainer)}>
-                        <LineChart
-                            data={data}
-                            viewBoxWidth={500}
-                            pointsStrokeColor="#3751FF"
-                            areaColor="#3751FF"
-                            areaVisible={true}
-                        />
-                    </div>
-                </Column>
-                <Column className={css(styles.separator)} breakpoints={{ 1024: { display: 'none' } }}><div /></Column>
-                <Column flexGrow={3} flexBasis="342px" breakpoints={{ 1024: css(styles.stats) }}>
-                    {this.renderStat('Resolved', '449')}
-                    {this.renderStat('Received', '426')}
-                    {this.renderStat('Average first response time', '33m')}
-                    {this.renderStat('Average response time', '3h 8m')}
-                    {this.renderStat('Resolution within SLA', '94%')}
-                </Column>
+            <Row vertical='center'>
+                <div style={{ width: 16, border: '2px solid', borderColor: color }}></div>
+                <span className={classes.legendTitle}>{title}</span>
             </Row>
         );
     }
+
+    function renderStat(title, value) {
+        return (
+            <Column
+                flexGrow={1}
+                className={classes.statContainer}
+                vertical='center'
+                horizontal='center'
+            >
+                <span className={classes.statTitle}>{title}</span>
+                <span className={classes.statValue}>{value}</span>
+            </Column>
+        );
+    }
+
+    return (
+        <Row
+            flexGrow={1}
+            className={classes.container}
+            horizontal='center'
+            breakpoints={{ 1024: 'column' }}
+        >
+            <Column
+                wrap
+                flexGrow={7}
+                flexBasis='735px'
+                className={classes.graphSection}
+                breakpoints={{ 1024: { width: 'calc(100% - 48px)', flexBasis: 'auto' } }}
+            >
+                <Row wrap horizontal='space-between'>
+                    <Column>
+                        <span className={classes.graphTitle}>Today’s trends</span>
+                        <span className={classes.graphSubtitle}>as of 25 May 2019, 09:41 PM</span>
+                    </Column>
+                    {renderLegend('#3751FF', 'Today')}
+                </Row>
+                <div className={classes.graphContainer}>
+                    <LineChart
+                        data={data}
+                        viewBoxWidth={500}
+                        pointsStrokeColor='#3751FF'
+                        areaColor='#3751FF'
+                        areaVisible={true}
+                    />
+                </div>
+            </Column>
+            <Column className={classes.separator} breakpoints={{ 1024: { display: 'none' } }}>
+                <div />
+            </Column>
+            <Column flexGrow={3} flexBasis='342px' breakpoints={{ 1024: classes.stats }}>
+                {renderStat('Resolved', '449')}
+                {renderStat('Received', '426')}
+                {renderStat('Average first response time', '33m')}
+                {renderStat('Average response time', '3h 8m')}
+                {renderStat('Resolution within SLA', '94%')}
+            </Column>
+        </Row>
+    );
 }
 
 export default TodayTrendsComponent;

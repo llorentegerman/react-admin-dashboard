@@ -1,9 +1,9 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite/no-important';
+import { createUseStyles } from 'react-jss';
 import CardComponent from './CardComponent';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     itemTitle: {
         fontFamily: 'Muli',
         fontStyle: 'normal',
@@ -18,28 +18,33 @@ const styles = StyleSheet.create({
     }
 });
 
-class UnresolvedTicketsComponent extends React.Component {
+function UnresolvedTicketsComponent({ containerStyles }) {
+    const classes = useStyles();
 
-    renderStat(title, value) {
-        return (<Row flexGrow={1} horizontal="space-between" vertical="center">
-            <span className={css(styles.itemTitle)}>{title}</span>
-            <span className={css(styles.itemTitle, styles.itemValue)}>{value}</span>
-        </Row>);
-    }
-
-    render() {
+    function renderStat(title, value) {
         return (
-            <CardComponent containerStyles={this.props.containerStyles} title="Unresolved tickets"
-                link="View details" subtitle="Group:" subtitleTwo="Support"
-                items={[
-                    this.renderStat('Waiting on Feature Request', 4238),
-                    this.renderStat('Awaiting Customer Response', 1005),
-                    this.renderStat('Awaiting Developer Fix', 914),
-                    this.renderStat('Pending', 281)
-                ]}
-            />
+            <Row flexGrow={1} horizontal='space-between' vertical='center'>
+                <span className={classes.itemTitle}>{title}</span>
+                <span className={[classes.itemTitle, classes.itemValue].join(' ')}>{value}</span>
+            </Row>
         );
     }
+
+    return (
+        <CardComponent
+            containerStyles={containerStyles}
+            title='Unresolved tickets'
+            link='View details'
+            subtitle='Group:'
+            subtitleTwo='Support'
+            items={[
+                renderStat('Waiting on Feature Request', 4238),
+                renderStat('Awaiting Customer Response', 1005),
+                renderStat('Awaiting Developer Fix', 914),
+                renderStat('Pending', 281)
+            ]}
+        />
+    );
 }
 
 export default UnresolvedTicketsComponent;

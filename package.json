@@ -4,15 +4,16 @@
     "private": true,
     "homepage": "https://llorentegerman.github.io/react-admin-dashboard",
     "dependencies": {
-        "aphrodite": "^2.3.1",
+        "react-jss": "^10.4.0",
         "prop-types": "^15.7.2",
-        "react": "^16.8.6",
+        "react": "^16.13.1",
         "react-burger-menu": "^2.6.13",
         "react-dom": "^16.8.6",
-        "react-scripts": "3.0.1",
+        "react-scripts": "3.4.3",
         "react-svg-line-chart": "^2.0.1",
         "simple-flexbox": "^2.3.1",
-        "react-collapsible-content": "^1.0.0"
+        "react-collapsible-content": "^1.0.0",
+        "react-router-dom": "^5.2.0"
     },
     "scripts": {
         "start": "react-scripts start",

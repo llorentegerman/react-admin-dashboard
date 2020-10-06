@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite/no-important';
+import { createUseStyles } from 'react-jss';
+import { IconCheckboxOn, IconCheckboxOff } from 'assets/icons';
 import CardComponent from './CardComponent';
-import CheckboxOn from '../../assets/checkbox-on';
-import CheckboxOff from '../../assets/checkbox-off';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     addButton: {
         backgroundColor: '#F0F1F7',
         color: '#9FA2B4',
@@ -47,82 +46,118 @@ const styles = StyleSheet.create({
 const TAGS = {
     URGENT: { text: 'URGENT', backgroundColor: '#FEC400', color: '#FFFFFF' },
     NEW: { text: 'NEW', backgroundColor: '#29CC97', color: '#FFFFFF' },
-    DEFAULT: { text: 'DEFAULT', backgroundColor: '#F0F1F7', color: '#9FA2B4' },
-}
+    DEFAULT: { text: 'DEFAULT', backgroundColor: '#F0F1F7', color: '#9FA2B4' }
+};
 
-class TasksComponent extends React.Component {
+function TasksComponent(props) {
+    const classes = useStyles();
+    const [items, setItems] = useState([
+        { title: 'Finish ticket update', checked: false, tag: TAGS.URGENT },
+        {
+            title: 'Create new ticket example',
+            checked: false,
+            tag: TAGS.NEW
+        },
+        { title: 'Update ticket report', checked: true, tag: TAGS.DEFAULT }
+    ]);
 
-    state = { items: [
-        {title: 'Finish ticket update', checked: false, tag: TAGS.URGENT },
-        {title: 'Create new ticket example', checked: false, tag: TAGS.NEW },
-        {title: 'Update ticket report', checked: true, tag: TAGS.DEFAULT }
-    ]};
-
-    renderTask = ({title, tag = {} }, index) => (
-        <Row horizontal="space-between" vertical="center">
-            <Row>
-                {this.renderCheckbox(index)}
-                <span className={css(styles.itemTitle)}>{title}</span>
+    function renderTask({ title, tag = {} }, index) {
+        return (
+            <Row horizontal='space-between' vertical='center'>
+                <Row>
+                    {renderCheckbox(index)}
+                    <span className={classes.itemTitle}>{title}</span>
+                </Row>
+                {renderTag(tag, index)}
             </Row>
-            {this.renderTag(tag, index)}
-        </Row>
-    );
+        );
+    }
 
-    renderTag = ({ text, backgroundColor, color }, index) => (
-        <Row horizontal="center" vertical="center"
-            style={{ backgroundColor, color }} className={css(styles.tagStyles)}
-            onClick={() => this.onTagClick(index)}>
-            {text}
-        </Row>
-    );
+    function renderTag({ text, backgroundColor, color }, index) {
+        return (
+            <Row
+                horizontal='center'
+                vertical='center'
+                style={{ backgroundColor, color }}
+                className={classes.tagStyles}
+                onClick={() => onTagClick(index)}
+            >
+                {text}
+            </Row>
+        );
+    }
 
-    renderCheckbox = (index) => <div className={css(styles.checkboxWrapper)} onClick={() => this.onCheckboxClick(index)}>
-        {this.state.items[index].checked ? <CheckboxOn /> : <CheckboxOff />}
-    </div>;
+    function renderCheckbox(index) {
+        return (
+            <div className={classes.checkboxWrapper} onClick={() => onCheckboxClick(index)}>
+                {items[index].checked ? <IconCheckboxOn /> : <IconCheckboxOff />}
+            </div>
+        );
+    }
 
-    onCheckboxClick = (index) => this.setState(prevState => {
-        const items = prevState.items;
-        items[index].checked = !items[index].checked;
-        return { items };
-    });
-
-    getNextTag = (except = 'URGENT') => {
+    function onCheckboxClick(index) {
+        setItems((prev) => {
+            const items = [...prev];
+            items[index].checked = !items[index].checked;
+            return { items };
+        });
+    }
+    function getNextTag(except = 'URGENT') {
         const tagLabels = ['URGENT', 'NEW', 'DEFAULT'];
         const tagIndex = (tagLabels.indexOf(except) + 1) % 3;
         return TAGS[tagLabels[tagIndex]];
     }
 
-    onTagClick = (index) => this.setState(prevState => {
-        const items = prevState.items;
-        items[index].tag = this.getNextTag(items[index].tag.text);
-        return { items };
-    })
+    function onTagClick(index) {
+        setItems((prev) => {
+            const items = [...prev];
+            items[index].tag = getNextTag(items[index].tag.text);
+            return { items };
+        });
+    }
 
-    onAddButtonClick = () => this.setState(prevState => {
-        const items = prevState.items;
-        items.push({ title: `Task ${items.length + 1}`, checked: false, tag: this.getNextTag() });
-        return { items };
-    });
+    function onAddButtonClick() {
+        setItems((prev) => {
+            const items = [...prev];
+            items.push({
+                title: `Task ${items.length + 1}`,
+                checked: false,
+                tag: getNextTag()
+            });
+            return { items };
+        });
+    }
 
-    renderAddButton = () => (
-        <Row horizontal="center" vertical="center" className={css(styles.tagStyles, styles.addButton)} onClick={this.onAddButtonClick}>
-            +
-        </Row>
-    )
-
-    render() {
+    function renderAddButton() {
         return (
-            <CardComponent containerStyles={this.props.containerStyles} title="Tasks" link="View all" subtitle="Today"
-                items={[
-                    <Row horizontal="space-between" vertical="center">
-                        <span className={css(styles.itemTitle, styles.greyTitle)}>Create new task</span>
-                        {this.renderAddButton()}
-                    </Row>,
-                    ...this.state.items.map(this.renderTask)
-                ]}
-            />
+            <Row
+                horizontal='center'
+                vertical='center'
+                className={[classes.tagStyles, classes.addButton].join(' ')}
+                onClick={onAddButtonClick}
+            >
+                +
+            </Row>
         );
     }
+
+    return (
+        <CardComponent
+            containerStyles={props.containerStyles}
+            title='Tasks'
+            link='View all'
+            subtitle='Today'
+            items={[
+                <Row horizontal='space-between' vertical='center'>
+                    <span className={[classes.itemTitle, classes.greyTitle].join(' ')}>
+                        Create new task
+                    </span>
+                    {renderAddButton()}
+                </Row>,
+                ...items.map(renderTask)
+            ]}
+        />
+    );
 }
 
 export default TasksComponent;

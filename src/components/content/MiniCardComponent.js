@@ -1,8 +1,8 @@
 import React from 'react';
 import { Column } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite/no-important';
+import { createUseStyles } from 'react-jss';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     container: {
         backgroundColor: '#FFFFFF',
         border: '1px solid #DFE0EB',
@@ -43,11 +43,12 @@ const styles = StyleSheet.create({
 });
 
 function MiniCardComponent({ className = '', title, value }) {
-    const composedClassName = `${css(styles.container)} ${className}`;
+    const classes = useStyles();
+    const composedClassName = [classes.container, className].join(' ');
     return (
-        <Column flexGrow={1} className={composedClassName} horizontal="center" vertical="center">
-            <span className={css(styles.title)}>{title}</span>
-            <span className={css(styles.value)}>{value}</span>
+        <Column flexGrow={1} className={composedClassName} horizontal='center' vertical='center'>
+            <span className={classes.title}>{title}</span>
+            <span className={classes.value}>{value}</span>
         </Column>
     );
 }

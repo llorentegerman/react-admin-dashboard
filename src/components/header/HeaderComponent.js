@@ -1,11 +1,10 @@
 import React from 'react';
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import IconSearch from '../../assets/icon-search';
-import IconBellNew from '../../assets/icon-bell-new';
+import { createUseStyles } from 'react-jss';
+import { IconBell, IconSearch } from 'assets/icons';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     avatar: {
         height: 35,
         width: 35,
@@ -67,30 +66,31 @@ const styles = StyleSheet.create({
 
 function HeaderComponent(props) {
     const { icon, title, ...otherProps } = props;
+    const classes = useStyles();
     return (
         <Row
-            className={css(styles.container)}
-            vertical="center"
-            horizontal="space-between"
+            className={classes.container}
+            vertical='center'
+            horizontal='space-between'
             {...otherProps}
         >
-            <span className={css(styles.title)}>{title}</span>
-            <Row vertical="center">
-                <div className={css(styles.iconStyles)}>
+            <span className={classes.title}>{title}</span>
+            <Row vertical='center'>
+                <div className={classes.iconStyles}>
                     <IconSearch />
                 </div>
-                <div className={css(styles.iconStyles)}>
-                    <IconBellNew />
+                <div className={classes.iconStyles}>
+                    <IconBell />
                 </div>
-                <div className={css(styles.separator)}></div>
-                <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>
+                <div className={classes.separator}></div>
+                <Row vertical='center'>
+                    <span className={[classes.name, classes.cursorPointer].join(' ')}>
                         Germán Llorente
                     </span>
                     <img
-                        src="https://avatars3.githubusercontent.com/u/21162888?s=460&v=4"
-                        alt="avatar"
-                        className={css(styles.avatar, styles.cursorPointer)}
+                        src='https://avatars3.githubusercontent.com/u/21162888?s=460&v=4'
+                        alt='avatar'
+                        className={[classes.avatar, classes.cursorPointer].join(' ')}
                     />
                 </Row>
             </Row>

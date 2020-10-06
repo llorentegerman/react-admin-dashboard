@@ -1,83 +1,89 @@
 import React from 'react';
-import { arrayOf, bool, func, object, string } from 'prop-types';
+import { any, func, string } from 'prop-types';
 import { Column, Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import CollapsibleComponent from 'react-collapsible-content';
-import SubItemComponent from './SubItemComponent';
+import { createUseStyles, useTheme } from 'react-jss';
+import CollapsibleContent from 'components/collapsible/CollapsibleContent';
+import { useSidebar } from 'hooks/useSidebar';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles({
     activeContainer: {
-        backgroundColor: 'rgba(221,226,255, 0.08)'
-    },
-    activeBar: {
-        borderLeft: '3px solid #DDE2FF'
+        backgroundColor: ({ theme }) => theme.color.paleBlueTransparent
     },
     activeTitle: {
-        color: '#DDE2FF'
+        color: ({ theme }) => theme.color.paleBlue
     },
     container: {
         display: 'flex',
         height: 56,
         cursor: 'pointer',
         ':hover': {
-            backgroundColor: 'rgba(221,226,255, 0.08)'
+            backgroundColor: ({ theme }) => theme.color.paleBlueTransparent
         },
-        paddingLeft: 32,
-        paddingRight: 32,
-        transition: 'background-color 0.425s ease-in-out'
+        paddingLeft: ({ level }) => 24 * level,
+        transition: 'all 0.2s ease-in-out'
+    },
+    leftBar: {
+        borderLeft: ({ theme, level }) =>
+            level > 1 ? 'none' : `3px solid ${theme.color.darkGrayishBlue}`
     },
     title: {
         fontFamily: 'Muli',
         fontSize: 16,
         lineHeight: '20px',
         letterSpacing: '0.2px',
-        color: '#A4A6B3',
+        color: ({ theme }) => theme.color.grayishBlue,
         marginLeft: 24
     }
 });
 
-function MenuItemComponent(props) {
-    const { active, expanded, icon, subItems = [], title, onClick } = props;
-    const Icon = icon;
+function MenuItemComponent({ children, icon: Icon, id, onClick, parentPath, title }) {
+    const theme = useTheme();
+    const path = !parentPath ? `/${id}` : `${parentPath}/${id}`;
+    const level = path.split('/').length - 1;
+    const isCollapsible = children && children.length > 0;
+    const classes = useStyles({ theme, level });
+
+    const { isExpanded, isActive, onItemClick } = useSidebar({
+        isCollapsible,
+        path
+    });
+    const classNameColumn = isActive ? classes.leftBar : '';
+    const classNameContainer = [classes.container, isActive && classes.activeContainer].join(' ');
+    const classNameTitle = [classes.title, isActive && classes.activeTitle].join(' ');
+    const iconColor = isActive ? theme.color.paleBlue : theme.color.grayishBlue2;
+
+    function onItemClicked(e) {
+        if (onClick) {
+            onClick(e);
+        }
+        onItemClick();
+    }
 
     return (
-        <Column>
-            <Row
-                vertical="center"
-                onClick={onClick}
-                className={`${css(
-                    styles.container,
-                    active && styles.activeContainer,
-                    active && styles.activeBar
-                )}`}
-            >
-                <Icon
-                    fill={active ? '#DDE2FF' : '#9FA2B4'}
-                    opacity={!active && '0.4'}
-                />
-                <span
-                    className={css(styles.title, active && styles.activeTitle)}
-                >
-                    {title}
-                </span>
+        <Column key={id} className={classNameColumn}>
+            <Row vertical='center' onClick={onItemClicked} className={classNameContainer}>
+                <Icon fill={iconColor} opacity={!isActive && '0.4'} />
+                <span className={classNameTitle}>{title}</span>
             </Row>
-            {subItems && subItems.length ? (
-                <CollapsibleComponent title={title} expanded={expanded}>
-                    {subItems.map((s, i) => SubItemComponent({ ...s }, i))}
-                </CollapsibleComponent>
-            ) : (
-                <div></div>
+            {isCollapsible && (
+                <CollapsibleContent expanded={isExpanded}>
+                    {children.map((child) => child.type({ ...child.props, parentPath: path }))}
+                </CollapsibleContent>
             )}
         </Column>
     );
 }
 
+MenuItemComponent.defaultProps = {
+    parentPath: ''
+};
+
 MenuItemComponent.propTypes = {
-    active: bool,
-    expanded: bool,
+    children: any,
     icon: func,
+    id: string,
     onClick: func,
-    subItems: arrayOf(object),
+    parentPath: string,
     title: string
 };
 
