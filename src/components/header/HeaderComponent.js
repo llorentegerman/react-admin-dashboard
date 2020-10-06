@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
-import { createUseStyles } from 'react-jss';
+import { createUseStyles, useTheme } from 'react-jss';
 import { SidebarContext } from 'hooks/useSidebar';
 import SLUGS from 'resources/slugs';
 import { IconBell, IconSearch } from 'assets/icons';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme) => ({
     avatar: {
         height: 35,
         width: 35,
         borderRadius: 50,
         marginLeft: 14,
-        border: '1px solid #DFE0EB'
+        border: `1px solid ${theme.color.lightGrayishBlue2}`
     },
     container: {
         height: 40
@@ -21,19 +21,14 @@ const useStyles = createUseStyles({
         cursor: 'pointer'
     },
     name: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        fontSize: 14,
-        lineHeight: '20px',
+        ...theme.typography.itemTitle,
         textAlign: 'right',
-        letterSpacing: 0.2,
         '@media (max-width: 768px)': {
             display: 'none'
         }
     },
     separator: {
-        borderLeft: '1px solid #DFE0EB',
+        borderLeft: `1px solid ${theme.color.lightGrayishBlue2}`,
         marginLeft: 32,
         marginRight: 32,
         height: 32,
@@ -44,12 +39,7 @@ const useStyles = createUseStyles({
         }
     },
     title: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 24,
-        lineHeight: '30px',
-        letterSpacing: 0.3,
+        ...theme.typography.title,
         '@media (max-width: 1080px)': {
             marginLeft: 50
         },
@@ -64,10 +54,12 @@ const useStyles = createUseStyles({
             marginLeft: 12
         }
     }
-});
+}));
 
 function HeaderComponent() {
     const { currentItem } = useContext(SidebarContext);
+    const theme = useTheme();
+    const classes = useStyles({ theme });
     let title;
     switch (true) {
         case currentItem === SLUGS.dashboard:
@@ -79,7 +71,6 @@ function HeaderComponent() {
         default:
             title = '';
     }
-    const classes = useStyles();
     return (
         <Row className={classes.container} vertical='center' horizontal='space-between'>
             <span className={classes.title}>{title}</span>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Column, Row } from 'simple-flexbox';
-import { createUseStyles } from 'react-jss';
+import { createUseStyles, useTheme } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme) => ({
     container: {
         backgroundColor: '#FFFFFF',
-        border: '1px solid #DFE0EB',
+        border: `1px solid ${theme.color.lightGrayishBlue2}`,
         borderRadius: 4,
         padding: '24px 32px 12px 32px'
     },
@@ -20,7 +20,7 @@ const useStyles = createUseStyles({
         paddingBottom: 18,
         paddingTop: 18,
         maxHeight: 22,
-        borderBottom: '1px solid #DFE0EB',
+        borderBottom: `1px solid ${theme.color.lightGrayishBlue2}`,
         ':last-child': {
             borderBottom: 'none'
         }
@@ -31,43 +31,23 @@ const useStyles = createUseStyles({
         paddingLeft: 16,
         paddingRight: 16
     },
-    link: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: '600',
-        fontSize: 14,
-        lineHeight: '20px',
-        letterSpacing: '0.2px',
-        color: '#3751FF',
-        textAlign: 'right',
-        cursor: 'pointer'
-    },
     subtitle: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: 12,
-        lineHeight: '16px',
-        letterSpacing: '0.1px',
-        color: '#9FA2B4'
+        ...theme.typography.smallSubtitle,
+        color: theme.color.grayishBlue2
     },
     subtitle2: {
-        color: '#252733',
+        color: theme.color.veryDarkGrayishBlue,
         marginLeft: 2
     },
     title: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 19,
-        lineHeight: '24px',
-        letterSpacing: '0.4px',
-        color: '#252733'
+        ...theme.typography.cardTitle,
+        color: theme.color.veryDarkGrayishBlue
     }
-});
+}));
 
 function CardComponent(props) {
-    const classes = useStyles();
+    const theme = useTheme();
+    const classes = useStyles({ theme });
     const { title, link, subtitle, subtitleTwo, items, containerStyles } = props;
     function renderItem(item, index) {
         return (
@@ -100,7 +80,7 @@ function CardComponent(props) {
                         )}
                     </Row>
                 </Column>
-                <span className={classes.link}>{link}</span>
+                <span className={theme.typography.link}>{link}</span>
             </Row>
             {items.map(renderItem)}
         </Column>

@@ -1,36 +1,29 @@
 import React, { useState } from 'react';
 import { Row } from 'simple-flexbox';
-import { createUseStyles } from 'react-jss';
+import { createUseStyles, useTheme } from 'react-jss';
 import { IconCheckboxOn, IconCheckboxOff } from 'assets/icons';
 import CardComponent from './CardComponent';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme) => ({
     addButton: {
-        backgroundColor: '#F0F1F7',
-        color: '#9FA2B4',
+        backgroundColor: theme.color.lightGrayishBlue,
+        color: theme.color.grayishBlue2,
         fontSize: 20,
         padding: 7
     },
     itemTitle: {
-        color: '#252733',
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: '600',
-        fontSize: 14,
-        letterSpacing: '0.2px',
-        lineHeight: '20px'
+        ...theme.typography.itemTitle,
+        color: theme.color.veryDarkGrayishBlue
     },
     itemValue: {
-        color: '#9FA2B4'
+        color: theme.color.grayishBlue2
     },
     greyTitle: {
-        color: '#C5C7CD'
+        color: theme.color.grayishBlue3
     },
     tagStyles: {
         borderRadius: 5,
         cursor: 'pointer',
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
         fontWeight: 'bold',
         fontSize: 11,
         letterSpacing: '0.5px',
@@ -41,7 +34,7 @@ const useStyles = createUseStyles({
         cursor: 'pointer',
         marginRight: 16
     }
-});
+}));
 
 const TAGS = {
     URGENT: { text: 'URGENT', backgroundColor: '#FEC400', color: '#FFFFFF' },
@@ -50,7 +43,8 @@ const TAGS = {
 };
 
 function TasksComponent(props) {
-    const classes = useStyles();
+    const theme = useTheme();
+    const classes = useStyles({ theme });
     const [items, setItems] = useState([
         { title: 'Finish ticket update', checked: false, tag: TAGS.URGENT },
         {

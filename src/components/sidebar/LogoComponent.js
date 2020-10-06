@@ -3,23 +3,18 @@ import { Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import { IconLogo } from 'assets/icons';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme) => ({
     container: {
         marginLeft: 32,
         marginRight: 32
     },
     title: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 19,
-        lineHeight: '24px',
-        letterSpacing: '0.4px',
-        color: ({ theme }) => theme.color.grayishBlue,
+        ...theme.typography.cardTitle,
+        color: theme.color.grayishBlue,
         opacity: 0.7,
         marginLeft: 12
     }
-});
+}));
 
 function LogoComponent() {
     const theme = useTheme();

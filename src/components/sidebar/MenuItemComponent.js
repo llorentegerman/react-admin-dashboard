@@ -24,7 +24,6 @@ const useStyles = createUseStyles({
             level > 1 ? 'none' : `3px solid ${theme.color.darkGrayishBlue}`
     },
     title: {
-        fontFamily: 'Muli',
         fontSize: 16,
         lineHeight: '20px',
         letterSpacing: '0.2px',

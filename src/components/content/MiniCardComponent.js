@@ -1,49 +1,43 @@
 import React from 'react';
 import { Column } from 'simple-flexbox';
-import { createUseStyles } from 'react-jss';
+import { createUseStyles, useTheme } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme) => ({
     container: {
         backgroundColor: '#FFFFFF',
-        border: '1px solid #DFE0EB',
+        border: `1px solid ${theme.color.lightGrayishBlue2}`,
         borderRadius: 4,
         cursor: 'pointer',
         height: 70,
         maxWidth: 350,
         padding: '24px 32px 24px 32px',
         ':hover': {
-            borderColor: '#3751FF',
+            borderColor: theme.color.lightBlue,
             ':nth-child(n) > span': {
-                color: '#3751FF'
+                color: theme.color.lightBlue
             }
         }
     },
     title: {
-        color: '#9FA2B4',
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 19,
-        lineHeight: '24px',
-        letterSpacing: '0.4px',
+        ...theme.typography.cardTitle,
+        color: theme.color.grayishBlue2,
         marginBottom: 12,
         minWidth: 102,
         textAlign: 'center'
     },
     value: {
-        color: '#252733',
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
+        color: theme.color.veryDarkGrayishBlue,
         fontWeight: 'bold',
         fontSize: 40,
         letterSpacing: '1px',
         lineHeight: '50px',
         textAlign: 'center'
     }
-});
+}));
 
 function MiniCardComponent({ className = '', title, value }) {
-    const classes = useStyles();
+    const theme = useTheme();
+    const classes = useStyles({ theme });
     const composedClassName = [classes.container, className].join(' ');
     return (
         <Column flexGrow={1} className={composedClassName} horizontal='center' vertical='center'>

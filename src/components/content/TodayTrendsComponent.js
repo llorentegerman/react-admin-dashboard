@@ -1,6 +1,6 @@
 import React from 'react';
 import { Column, Row } from 'simple-flexbox';
-import { createUseStyles } from 'react-jss';
+import { createUseStyles, useTheme } from 'react-jss';
 import LineChart from 'react-svg-line-chart';
 
 const data = [];
@@ -9,10 +9,10 @@ for (let x = 1; x <= 24; x++) {
     data.push({ x: x, y: Math.floor(Math.random() * 100) });
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme) => ({
     container: {
         backgroundColor: '#FFFFFF',
-        border: '1px solid #DFE0EB',
+        border: `1px solid ${theme.color.lightGrayishBlue2}`,
         borderRadius: 4,
         cursor: 'pointer'
     },
@@ -26,42 +26,28 @@ const useStyles = createUseStyles({
         padding: 24
     },
     graphSubtitle: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: 12,
-        lineHeight: '16px',
-        letterSpacing: '0.1px',
-        color: '#9FA2B4',
+        ...theme.typography.smallSubtitle,
+        color: theme.color.grayishBlue2,
         marginTop: 4,
         marginRight: 8
     },
     graphTitle: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 19,
-        lineHeight: '24px',
-        letterSpacing: '0.4px',
-        color: '#252733'
+        ...theme.typography.cardTitle,
+        color: theme.color.veryDarkGrayishBlue
     },
     legendTitle: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
+        ...theme.typography.smallSubtitle,
         fontWeight: '600',
-        fontSize: 12,
-        lineHeight: '15px',
-        letterSpacing: '0.1px',
-        color: '#9FA2B4',
+        color: theme.color.grayishBlue2,
         marginLeft: 8
     },
     separator: {
-        backgroundColor: '#DFE0EB',
+        backgroundColor: theme.color.lightGrayishBlue2,
         width: 1,
         minWidth: 1
     },
     statContainer: {
-        borderBottom: '1px solid #DFE0EB',
+        borderBottom: `1px solid ${theme.color.lightGrayishBlue2}`,
         padding: '24px 32px 24px 32px',
         height: 'calc(114px - 48px)',
         ':last-child': {
@@ -69,35 +55,29 @@ const useStyles = createUseStyles({
         }
     },
     stats: {
-        borderTop: '1px solid #DFE0EB',
+        borderTop: `1px solid ${theme.color.lightGrayishBlue2}`,
         width: '100%'
     },
     statTitle: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
         fontWeight: '600',
         fontSize: 16,
         lineHeight: '22px',
         letterSpacing: '0.3px',
         textAlign: 'center',
-        color: '#9FA2B4',
+        color: theme.color.grayishBlue2,
         whiteSpace: 'nowrap',
         marginBottom: 6
     },
     statValue: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 24,
-        lineHeight: '30px',
-        letterSpacing: '0.3px',
+        ...theme.typography.title,
         textAlign: 'center',
-        color: '#252733'
+        color: theme.color.veryDarkGrayishBlue
     }
-});
+}));
 
 function TodayTrendsComponent() {
-    const classes = useStyles();
+    const theme = useTheme();
+    const classes = useStyles({ theme });
 
     function renderLegend(color, title) {
         return (
@@ -141,14 +121,14 @@ function TodayTrendsComponent() {
                         <span className={classes.graphTitle}>Today’s trends</span>
                         <span className={classes.graphSubtitle}>as of 25 May 2019, 09:41 PM</span>
                     </Column>
-                    {renderLegend('#3751FF', 'Today')}
+                    {renderLegend(theme.color.lightBlue, 'Today')}
                 </Row>
                 <div className={classes.graphContainer}>
                     <LineChart
                         data={data}
                         viewBoxWidth={500}
-                        pointsStrokeColor='#3751FF'
-                        areaColor='#3751FF'
+                        pointsStrokeColor={theme.color.lightBlue}
+                        areaColor={theme.color.lightBlue}
                         areaVisible={true}
                     />
                 </div>
