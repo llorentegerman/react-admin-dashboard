@@ -55,19 +55,19 @@ function SidebarComponent() {
             />
             <MenuItem id='overview' title='Overview' icon={IconOverview}>
                 <MenuItem
-                    id='overview_one'
+                    id='one'
                     title='Sub Item 1'
                     icon={IconAgents}
                     onClick={() => onClick(SLUGS.overview)}
                 />
                 <MenuItem
-                    id='overview_two'
+                    id='two'
                     title='Sub Item 2'
                     icon={IconIdeas}
                     onClick={() => onClick(SLUGS.overviewTwo)}
                 />
                 <MenuItem
-                    id='overview_three'
+                    id='three'
                     title='Sub Item 3'
                     icon={IconIdeas}
                     onClick={() => onClick(SLUGS.overviewThree)}
@@ -81,19 +81,19 @@ function SidebarComponent() {
             />
             <MenuItem id='ideas' title='Ideas' icon={iconIdeas}>
                 <MenuItem
-                    id='ideas_one'
+                    id='one'
                     title='Sub Item 1'
                     icon={IconAgents}
                     onClick={() => onClick(SLUGS.ideas)}
                 />
                 <MenuItem
-                    id='ideas_two'
+                    id='two'
                     title='Sub Item 2'
                     icon={IconIdeas}
                     onClick={() => onClick(SLUGS.ideasTwo)}
                 />
                 <MenuItem
-                    id='ideas_three'
+                    id='three'
                     title='Sub Item 3'
                     icon={IconIdeas}
                     onClick={() => onClick(SLUGS.ideasThree)}

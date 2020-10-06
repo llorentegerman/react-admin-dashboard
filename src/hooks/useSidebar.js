@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
 
-const SidebarContext = createContext();
+export const SidebarContext = createContext();
 
 export function SidebarProvider({ children, defaultPath }) {
     const [currentPath, setCurrentPath] = useState(defaultPath);

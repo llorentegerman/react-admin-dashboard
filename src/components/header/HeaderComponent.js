@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { string } from 'prop-types';
+import { SidebarContext } from 'hooks/useSidebar';
 import { Row } from 'simple-flexbox';
 import { createUseStyles } from 'react-jss';
 import { IconBell, IconSearch } from 'assets/icons';
@@ -64,16 +65,22 @@ const useStyles = createUseStyles({
     }
 });
 
-function HeaderComponent(props) {
-    const { icon, title, ...otherProps } = props;
+function HeaderComponent() {
+    const { currentPath } = useContext(SidebarContext);
+    let title;
+    switch (true) {
+        case currentPath === '/dashboard':
+            title = 'Dashboard';
+            break;
+        case currentPath.indexOf('/overview') === 0:
+            title = 'Overview';
+            break;
+        default:
+            title = '';
+    }
     const classes = useStyles();
     return (
-        <Row
-            className={classes.container}
-            vertical='center'
-            horizontal='space-between'
-            {...otherProps}
-        >
+        <Row className={classes.container} vertical='center' horizontal='space-between'>
             <span className={classes.title}>{title}</span>
             <Row vertical='center'>
                 <div className={classes.iconStyles}>

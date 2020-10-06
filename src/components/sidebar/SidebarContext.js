@@ -1,9 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { SidebarProvider } from 'hooks/useSidebar';
-import SidebarComponent from './SidebarComponent';
 
-const SidebarContext = () => {
+function SidebarContext({ children }) {
     const { pathname } = useLocation();
     let defaultPath;
     switch (pathname) {
@@ -16,10 +15,6 @@ const SidebarContext = () => {
         default:
             defaultPath = pathname;
     }
-    return (
-        <SidebarProvider defaultPath={defaultPath}>
-            <SidebarComponent />
-        </SidebarProvider>
-    );
-};
+    return <SidebarProvider defaultPath={defaultPath}>{children}</SidebarProvider>;
+}
 export default SidebarContext;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { createUseStyles, useTheme } from 'react-jss';
 import { Column, Row } from 'simple-flexbox';
-import SidebarContext from 'components/sidebar';
+import { SidebarComponent, SidebarContext } from 'components/sidebar';
+import HeaderComponent from 'components/header/HeaderComponent';
 import PrivateRoutes from './PrivateRoutes';
 
 const useStyles = createUseStyles({
@@ -10,7 +11,8 @@ const useStyles = createUseStyles({
         minHeight: 850
     },
     mainBlock: {
-        paddingLeft: 255
+        marginLeft: 255,
+        padding: 30
     }
 });
 
@@ -19,14 +21,15 @@ function PrivateSection() {
     const classes = useStyles({ theme });
 
     return (
-        <Column className={classes.container}>
-            <Row>
-                <SidebarContext />
+        <SidebarContext>
+            <Row className={classes.container}>
+                <SidebarComponent />
                 <Column flexGrow={1} className={classes.mainBlock}>
+                    <HeaderComponent />
                     <PrivateRoutes />
                 </Column>
             </Row>
-        </Column>
+        </SidebarContext>
     );
 }
 

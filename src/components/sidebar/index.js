@@ -1,3 +1,4 @@
+import SidebarComponent from './SidebarComponent';
 import SidebarContext from './SidebarContext';
 
-export default SidebarContext;
+export { SidebarComponent, SidebarContext };
