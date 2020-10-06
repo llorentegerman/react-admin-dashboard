@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import { string } from 'prop-types';
-import { SidebarContext } from 'hooks/useSidebar';
 import { Row } from 'simple-flexbox';
 import { createUseStyles } from 'react-jss';
+import { SidebarContext } from 'hooks/useSidebar';
+import SLUGS from 'resources/slugs';
 import { IconBell, IconSearch } from 'assets/icons';
 
 const useStyles = createUseStyles({
@@ -66,13 +67,13 @@ const useStyles = createUseStyles({
 });
 
 function HeaderComponent() {
-    const { currentPath } = useContext(SidebarContext);
+    const { currentItem } = useContext(SidebarContext);
     let title;
     switch (true) {
-        case currentPath === '/dashboard':
+        case currentItem === SLUGS.dashboard:
             title = 'Dashboard';
             break;
-        case currentPath.indexOf('/overview') === 0:
+        case [SLUGS.overview, SLUGS.overviewTwo, SLUGS.overviewThree].includes(currentItem):
             title = 'Overview';
             break;
         default:

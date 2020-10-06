@@ -2,23 +2,23 @@ import React, { useState, useEffect, useContext, createContext } from 'react';
 
 export const SidebarContext = createContext();
 
-export function SidebarProvider({ children, defaultPath }) {
-    const [currentPath, setCurrentPath] = useState(defaultPath);
+export function SidebarProvider({ children, defaultItem }) {
+    const [currentItem, setCurrentItem] = useState(defaultItem);
     useEffect(() => {
-        if (defaultPath !== currentPath) {
-            return setCurrentPath(defaultPath);
+        if (defaultItem !== currentItem) {
+            return setCurrentItem(defaultItem);
         }
-    }, [currentPath, defaultPath]);
+    }, [currentItem, defaultItem]);
     return (
-        <SidebarContext.Provider value={{ currentPath, setCurrentPath }}>
+        <SidebarContext.Provider value={{ currentItem, setCurrentItem }}>
             {children}
         </SidebarContext.Provider>
     );
 }
 
-export const useSidebar = ({ isCollapsible, path } = {}) => {
-    const { currentPath, setCurrentPath } = useContext(SidebarContext);
-    const isActive = path === currentPath || currentPath.indexOf(`${path}/`) === 0;
+export const useSidebar = ({ isCollapsible, item, items = [] } = {}) => {
+    const { currentItem, setCurrentItem } = useContext(SidebarContext);
+    const isActive = item === currentItem || items.includes(currentItem);
     const [isExpanded, setIsExpanded] = useState(isActive);
 
     useEffect(() => {
@@ -29,11 +29,11 @@ export const useSidebar = ({ isCollapsible, path } = {}) => {
             return setIsExpanded(true);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPath]);
+    }, [currentItem]);
 
     const onItemClick = () => {
         if (!isCollapsible) {
-            setCurrentPath(path);
+            setCurrentItem(item);
         }
         setIsExpanded((prev) => !prev);
     };
