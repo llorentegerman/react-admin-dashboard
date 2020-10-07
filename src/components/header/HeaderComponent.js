@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { string } from 'prop-types';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import IconSearch from '../../assets/icon-search';
-import IconBellNew from '../../assets/icon-bell-new';
+import { createUseStyles, useTheme } from 'react-jss';
+import { SidebarContext } from 'hooks/useSidebar';
+import SLUGS from 'resources/slugs';
+import { IconBell, IconSearch } from 'assets/icons';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles((theme) => ({
     avatar: {
         height: 35,
         width: 35,
         borderRadius: 50,
         marginLeft: 14,
-        border: '1px solid #DFE0EB',
+        border: `1px solid ${theme.color.lightGrayishBlue2}`
     },
     container: {
         height: 40
@@ -20,19 +21,14 @@ const styles = StyleSheet.create({
         cursor: 'pointer'
     },
     name: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 600,
-        fontSize: 14,
-        lineHeight: '20px',
+        ...theme.typography.itemTitle,
         textAlign: 'right',
-        letterSpacing: 0.2,
         '@media (max-width: 768px)': {
             display: 'none'
         }
     },
     separator: {
-        borderLeft: '1px solid #DFE0EB',
+        borderLeft: `1px solid ${theme.color.lightGrayishBlue2}`,
         marginLeft: 32,
         marginRight: 32,
         height: 32,
@@ -43,14 +39,9 @@ const styles = StyleSheet.create({
         }
     },
     title: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 24,
-        lineHeight: '30px',
-        letterSpacing: 0.3,
-        '@media (max-width: 768px)': {
-            marginLeft: 36
+        ...theme.typography.title,
+        '@media (max-width: 1080px)': {
+            marginLeft: 50
         },
         '@media (max-width: 468px)': {
             fontSize: 20
@@ -63,24 +54,64 @@ const styles = StyleSheet.create({
             marginLeft: 12
         }
     }
-});
+}));
 
-function HeaderComponent(props) {
-    const { icon, title, ...otherProps } = props;
+function HeaderComponent() {
+    const { currentItem } = useContext(SidebarContext);
+    const theme = useTheme();
+    const classes = useStyles({ theme });
+    let title;
+    switch (true) {
+        case currentItem === SLUGS.dashboard:
+            title = 'Dashboard';
+            break;
+        case [SLUGS.overview, SLUGS.overviewTwo, SLUGS.overviewThree].includes(currentItem):
+            title = 'Overview';
+            break;
+        case currentItem === SLUGS.tickets:
+            title = 'Tickets';
+            break;
+        case [SLUGS.ideas, SLUGS.ideasTwo, SLUGS.ideasThree].includes(currentItem):
+            title = 'Ideas';
+            break;
+        case currentItem === SLUGS.contacts:
+            title = 'Contacts';
+            break;
+        case currentItem === SLUGS.agents:
+            title = 'Agents';
+            break;
+        case currentItem === SLUGS.articles:
+            title = 'Articles';
+            break;
+        case currentItem === SLUGS.subscription:
+            title = 'Subscription';
+            break;
+        case currentItem === SLUGS.settings:
+            title = 'Settings';
+            break;
+        default:
+            title = '';
+    }
     return (
-        <Row className={css(styles.container)} vertical="center" horizontal="space-between" {...otherProps}>
-            <span className={css(styles.title)}>{title}</span>
-            <Row vertical="center">
-                <div className={css(styles.iconStyles)}>
+        <Row className={classes.container} vertical='center' horizontal='space-between'>
+            <span className={classes.title}>{title}</span>
+            <Row vertical='center'>
+                <div className={classes.iconStyles}>
                     <IconSearch />
                 </div>
-                <div className={css(styles.iconStyles)}>
-                    <IconBellNew />
+                <div className={classes.iconStyles}>
+                    <IconBell />
                 </div>
-                <div className={css(styles.separator)}></div>
-                <Row vertical="center">
-                    <span className={css(styles.name, styles.cursorPointer)}>Germán Llorente</span>
-                    <img src="https://avatars3.githubusercontent.com/u/21162888?s=460&v=4" alt="avatar" className={css(styles.avatar, styles.cursorPointer)} />
+                <div className={classes.separator}></div>
+                <Row vertical='center'>
+                    <span className={[classes.name, classes.cursorPointer].join(' ')}>
+                        Germán Llorente
+                    </span>
+                    <img
+                        src='https://avatars3.githubusercontent.com/u/21162888?s=460&v=4'
+                        alt='avatar'
+                        className={[classes.avatar, classes.cursorPointer].join(' ')}
+                    />
                 </Row>
             </Row>
         </Row>

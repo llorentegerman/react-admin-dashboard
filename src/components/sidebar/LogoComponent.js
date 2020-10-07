@@ -1,31 +1,28 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
-import { StyleSheet, css } from 'aphrodite';
-import Logo from '../../assets/icon-logo';
+import { createUseStyles, useTheme } from 'react-jss';
+import { IconLogo } from 'assets/icons';
 
-const styles = StyleSheet.create({
+const useStyles = createUseStyles((theme) => ({
     container: {
         marginLeft: 32,
         marginRight: 32
     },
     title: {
-        fontFamily: 'Muli',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 19,
-        lineHeight: '24px',
-        letterSpacing: '0.4px',
-        color: '#A4A6B3',
+        ...theme.typography.cardTitle,
+        color: theme.color.grayishBlue,
         opacity: 0.7,
         marginLeft: 12
     }
-});
+}));
 
 function LogoComponent() {
+    const theme = useTheme();
+    const classes = useStyles({ theme });
     return (
-        <Row className={css(styles.container)} horizontal="center" vertical="center">
-            <Logo />
-            <span className={css(styles.title)}>Dashboard Kit</span>
+        <Row className={classes.container} horizontal='center' vertical='center'>
+            <IconLogo />
+            <span className={classes.title}>Dashboard Kit</span>
         </Row>
     );
 }
