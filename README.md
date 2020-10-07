@@ -24,9 +24,9 @@ Although the code has been totally refactored, in order to use of functional com
     i.e.: useSidebar, useQuery, etc.
 
 -   **/resources**:
-    slugs.js: a list of the routes that will be used in the app
-    theme.js: an object with the theme structure, colors, typographies.
-    utilities.js: any utility function, for example "convertSlugToUrl", which is used in conjunction with "history.push" (react router) for redirects and links.
+    -   slugs.js: a list of the routes that will be used in the app
+    -   theme.js: an object with the theme structure, colors, typographies.
+    -   utilities.js: any utility function, for example "convertSlugToUrl", which is used in conjunction with "history.push" (react router) for redirects and links.
 
 -   **/routes**:
     We have 2 types of routes, public and private.
