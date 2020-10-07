@@ -8,12 +8,11 @@ const useStyles = createUseStyles((theme) => ({
         border: `1px solid ${theme.color.lightGrayishBlue2}`,
         borderRadius: 4,
         cursor: 'pointer',
-        height: 70,
         maxWidth: 350,
-        padding: '24px 32px 24px 32px',
-        ':hover': {
+        padding: '16px 32px 16px 32px',
+        '&:hover': {
             borderColor: theme.color.lightBlue,
-            ':nth-child(n) > span': {
+            '&:nth-child(n) > span': {
                 color: theme.color.lightBlue
             }
         }

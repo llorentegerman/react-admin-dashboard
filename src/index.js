@@ -8,13 +8,11 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <ThemeProvider theme={Theme}>
-            <Router>
-                <Routes />
-            </Router>
-        </ThemeProvider>
-    </React.StrictMode>,
+    <ThemeProvider theme={Theme}>
+        <Router>
+            <Routes />
+        </Router>
+    </ThemeProvider>,
     document.getElementById('root')
 );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
-import CardComponent from './CardComponent';
+import CardComponent from 'components/cards/CardComponent';
 
 const useStyles = createUseStyles((theme) => ({
     itemTitle: {
@@ -19,7 +19,7 @@ function UnresolvedTicketsComponent({ containerStyles }) {
 
     function renderStat(title, value) {
         return (
-            <Row flexGrow={1} horizontal='space-between' vertical='center'>
+            <Row horizontal='space-between' vertical='center'>
                 <span className={classes.itemTitle}>{title}</span>
                 <span className={[classes.itemTitle, classes.itemValue].join(' ')}>{value}</span>
             </Row>

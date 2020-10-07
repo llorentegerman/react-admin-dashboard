@@ -1,7 +1,7 @@
 import React from 'react';
 import { Column, Row } from 'simple-flexbox';
 import { createUseStyles } from 'react-jss';
-import MiniCardComponent from './MiniCardComponent';
+import MiniCardComponent from 'components/cards/MiniCardComponent';
 import TodayTrendsComponent from './TodayTrendsComponent';
 import UnresolvedTicketsComponent from './UnresolvedTicketsComponent';
 import TasksComponent from './TasksComponent';
@@ -45,7 +45,7 @@ const useStyles = createUseStyles({
     }
 });
 
-function ContentComponent() {
+function DashboardComponent() {
     const classes = useStyles();
     return (
         <Column>
@@ -108,4 +108,4 @@ function ContentComponent() {
     );
 }
 
-export default ContentComponent;
+export default DashboardComponent;

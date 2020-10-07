@@ -7,7 +7,8 @@ const useStyles = createUseStyles((theme) => ({
         backgroundColor: '#FFFFFF',
         border: `1px solid ${theme.color.lightGrayishBlue2}`,
         borderRadius: 4,
-        padding: '24px 32px 12px 32px'
+        padding: '24px 32px 0px 32px',
+        height: '100%'
     },
     containerMobile: {
         padding: '12px 16px 6px 16px !important'
@@ -19,9 +20,8 @@ const useStyles = createUseStyles((theme) => ({
         paddingRight: 32,
         paddingBottom: 18,
         paddingTop: 18,
-        maxHeight: 22,
         borderBottom: `1px solid ${theme.color.lightGrayishBlue2}`,
-        ':last-child': {
+        '&:last-child': {
             borderBottom: 'none'
         }
     },
@@ -30,6 +30,9 @@ const useStyles = createUseStyles((theme) => ({
         marginRight: -16,
         paddingLeft: 16,
         paddingRight: 16
+    },
+    link: {
+        ...theme.typography.link
     },
     subtitle: {
         ...theme.typography.smallSubtitle,
@@ -52,7 +55,6 @@ function CardComponent(props) {
     function renderItem(item, index) {
         return (
             <Column
-                flexGrow={1}
                 className={classes.itemContainer}
                 key={`item-${index}`}
                 breakpoints={{ 426: classes.itemContainerMobile }}
@@ -80,7 +82,7 @@ function CardComponent(props) {
                         )}
                     </Row>
                 </Column>
-                <span className={theme.typography.link}>{link}</span>
+                <span className={classes.link}>{link}</span>
             </Row>
             {items.map(renderItem)}
         </Column>

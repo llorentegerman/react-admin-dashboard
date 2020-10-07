@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import { IconCheckboxOn, IconCheckboxOff } from 'assets/icons';
-import CardComponent from './CardComponent';
+import CardComponent from 'components/cards/CardComponent';
 
 const useStyles = createUseStyles((theme) => ({
     addButton: {
         backgroundColor: theme.color.lightGrayishBlue,
         color: theme.color.grayishBlue2,
-        fontSize: 20,
-        padding: 7
+        fontSize: '20px !important',
+        padding: '7px !important'
     },
     itemTitle: {
         ...theme.typography.itemTitle,
@@ -55,70 +55,36 @@ function TasksComponent(props) {
         { title: 'Update ticket report', checked: true, tag: TAGS.DEFAULT }
     ]);
 
-    function renderTask({ title, tag = {} }, index) {
-        return (
-            <Row horizontal='space-between' vertical='center'>
-                <Row>
-                    {renderCheckbox(index)}
-                    <span className={classes.itemTitle}>{title}</span>
-                </Row>
-                {renderTag(tag, index)}
-            </Row>
-        );
-    }
-
-    function renderTag({ text, backgroundColor, color }, index) {
-        return (
-            <Row
-                horizontal='center'
-                vertical='center'
-                style={{ backgroundColor, color }}
-                className={classes.tagStyles}
-                onClick={() => onTagClick(index)}
-            >
-                {text}
-            </Row>
-        );
-    }
-
-    function renderCheckbox(index) {
-        return (
-            <div className={classes.checkboxWrapper} onClick={() => onCheckboxClick(index)}>
-                {items[index].checked ? <IconCheckboxOn /> : <IconCheckboxOff />}
-            </div>
-        );
-    }
-
     function onCheckboxClick(index) {
         setItems((prev) => {
-            const items = [...prev];
-            items[index].checked = !items[index].checked;
-            return { items };
+            const newItems = [...prev];
+            newItems[index].checked = newItems[index].checked ? false : true;
+            return newItems;
         });
     }
-    function getNextTag(except = 'URGENT') {
+    function getNextTag(current = 'URGENT') {
         const tagLabels = ['URGENT', 'NEW', 'DEFAULT'];
-        const tagIndex = (tagLabels.indexOf(except) + 1) % 3;
+        const tagIndex = (tagLabels.indexOf(current) + 1) % 3;
         return TAGS[tagLabels[tagIndex]];
     }
 
     function onTagClick(index) {
         setItems((prev) => {
-            const items = [...prev];
-            items[index].tag = getNextTag(items[index].tag.text);
-            return { items };
+            const newItems = [...prev];
+            newItems[index].tag = getNextTag(newItems[index].tag.text);
+            return newItems;
         });
     }
 
     function onAddButtonClick() {
         setItems((prev) => {
-            const items = [...prev];
-            items.push({
-                title: `Task ${items.length + 1}`,
+            const newItems = [...prev];
+            newItems.push({
+                title: `Task ${newItems.length + 1}`,
                 checked: false,
                 tag: getNextTag()
             });
-            return { items };
+            return newItems;
         });
     }
 
@@ -148,9 +114,53 @@ function TasksComponent(props) {
                     </span>
                     {renderAddButton()}
                 </Row>,
-                ...items.map(renderTask)
+                ...items.map((item, index) => (
+                    <TaskComponent
+                        classes={classes}
+                        index={index}
+                        item={item}
+                        onCheckboxClick={onCheckboxClick}
+                        onTagClick={onTagClick}
+                    />
+                ))
             ]}
         />
+    );
+}
+
+function TaskComponent({ classes, index, item = {}, onCheckboxClick, onTagClick }) {
+    const { tag = {} } = item;
+    return (
+        <Row horizontal='space-between' vertical='center'>
+            <Row>
+                <div className={classes.checkboxWrapper} onClick={() => onCheckboxClick(index)}>
+                    {item.checked ? <IconCheckboxOn /> : <IconCheckboxOff />}
+                </div>
+                <span className={classes.itemTitle}>{item.title}</span>
+            </Row>
+            <TagComponent
+                backgroundColor={tag.backgroundColor}
+                classes={classes}
+                color={tag.color}
+                index={index}
+                onClick={onTagClick}
+                text={tag.text}
+            />
+        </Row>
+    );
+}
+
+function TagComponent({ backgroundColor, classes, color, index, onClick, text }) {
+    return (
+        <Row
+            horizontal='center'
+            vertical='center'
+            style={{ backgroundColor, color }}
+            className={classes.tagStyles}
+            onClick={() => onClick(index)}
+        >
+            {text}
+        </Row>
     );
 }
 

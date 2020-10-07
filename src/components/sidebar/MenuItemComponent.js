@@ -13,7 +13,7 @@ const useStyles = createUseStyles({
         display: 'flex',
         height: 56,
         cursor: 'pointer',
-        ':hover': {
+        '&:hover': {
             backgroundColor: ({ theme }) => theme.color.paleBlueTransparent
         },
         paddingLeft: ({ level }) => 32 * level,
