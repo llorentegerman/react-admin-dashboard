@@ -1,5 +1,5 @@
 export default {
-    // beverages
+    // private
     dashboard: '/dashboard',
     overview: '/overview',
     overviewTwo: '/overview/two',
@@ -16,5 +16,5 @@ export default {
     // auth
     login: '/login',
     signup: '/signup',
-    forgotPassword: '/forgot_password',
+    forgotPassword: '/forgot_password'
 };
