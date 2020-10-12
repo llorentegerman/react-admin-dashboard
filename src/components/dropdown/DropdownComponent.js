@@ -11,23 +11,25 @@ const useStyles = createUseStyles((theme) => ({
         right: 15
     },
     dropdownButton: {
-        cursor: 'pointer',
+        alignItems: 'center',
         background: 'transparent',
         border: 'none',
+        cursor: 'pointer',
         display: 'flex',
-        alignItems: 'center',
+        padding: 0,
         outline: 'none'
     },
     dropdownContainer: {
         position: 'relative'
     },
     dropdownItemsContainer: {
-        position: 'absolute',
         background: 'white',
         border: `1px solid ${theme.color.lightGrayishBlue2}`,
         borderRadius: 5,
-        width: '100%',
         minWidth: 170,
+        padding: 0,
+        position: 'absolute',
+        width: '100%',
         top: ({ position }) => position.top,
         right: ({ position }) => position.right,
         bottom: ({ position }) => position.bottom,
@@ -122,7 +124,7 @@ DropdownComponent.propTypes = {
 DropdownComponent.defaultProps = {
     position: {
         top: 52,
-        right: 0
+        right: -6
     }
 };
 

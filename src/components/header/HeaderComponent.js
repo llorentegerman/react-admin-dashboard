@@ -12,9 +12,13 @@ const useStyles = createUseStyles((theme) => ({
     avatar: {
         height: 35,
         width: 35,
+        minWidth: 35,
         borderRadius: 50,
         marginLeft: 14,
-        border: `1px solid ${theme.color.lightGrayishBlue2}`
+        border: `1px solid ${theme.color.lightGrayishBlue2}`,
+        '@media (max-width: 768px)': {
+            marginLeft: 14
+        }
     },
     container: {
         height: 40
@@ -33,8 +37,8 @@ const useStyles = createUseStyles((theme) => ({
         height: 32,
         width: 2,
         '@media (max-width: 768px)': {
-            marginLeft: 12,
-            marginRight: 12
+            marginLeft: 14,
+            marginRight: 0
         }
     },
     title: {
@@ -60,6 +64,7 @@ function HeaderComponent() {
     const { currentItem } = useContext(SidebarContext);
     const theme = useTheme();
     const classes = useStyles({ theme });
+
     let title;
     switch (true) {
         case currentItem === SLUGS.dashboard:
@@ -127,7 +132,7 @@ function HeaderComponent() {
                         ]}
                         position={{
                             top: 42,
-                            right: -8
+                            right: -14
                         }}
                     />
                 </div>
@@ -153,6 +158,10 @@ function HeaderComponent() {
                             onClick: () => console.log('logout')
                         }
                     ]}
+                    position={{
+                        top: 52,
+                        right: -6
+                    }}
                 />
             </Row>
         </Row>

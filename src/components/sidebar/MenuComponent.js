@@ -50,7 +50,7 @@ const getMenuStyles = ({ theme }) => ({
 function MenuComponent({ children, isMobile }) {
     const theme = useTheme();
     const menuStyles = getMenuStyles({ theme });
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <Menu
