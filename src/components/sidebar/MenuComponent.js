@@ -34,7 +34,7 @@ const getMenuStyles = ({ theme }) => ({
     },
     bmItem: {
         outline: 'none',
-        ':focus': {
+        '&:focus': {
             outline: 'none'
         }
     },
