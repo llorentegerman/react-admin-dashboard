@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import { SidebarContext } from 'hooks/useSidebar';
 import SLUGS from 'resources/slugs';
 import { IconBell, IconSearch } from 'assets/icons';
+import DropdownComponent from 'components/dropdown';
 
 const useStyles = createUseStyles((theme) => ({
     avatar: {
@@ -16,9 +18,6 @@ const useStyles = createUseStyles((theme) => ({
     },
     container: {
         height: 40
-    },
-    cursorPointer: {
-        cursor: 'pointer'
     },
     name: {
         ...theme.typography.itemTitle,
@@ -57,6 +56,7 @@ const useStyles = createUseStyles((theme) => ({
 }));
 
 function HeaderComponent() {
+    const { push } = useHistory();
     const { currentItem } = useContext(SidebarContext);
     const theme = useTheme();
     const classes = useStyles({ theme });
@@ -92,6 +92,11 @@ function HeaderComponent() {
         default:
             title = '';
     }
+
+    function onSettingsClick() {
+        push(SLUGS.settings);
+    }
+
     return (
         <Row className={classes.container} vertical='center' horizontal='space-between'>
             <span className={classes.title}>{title}</span>
@@ -100,19 +105,55 @@ function HeaderComponent() {
                     <IconSearch />
                 </div>
                 <div className={classes.iconStyles}>
-                    <IconBell />
+                    <DropdownComponent
+                        label={<IconBell />}
+                        options={[
+                            {
+                                label: 'Notification #1',
+                                onClick: () => console.log('Notification #1')
+                            },
+                            {
+                                label: 'Notification #2',
+                                onClick: () => console.log('Notification #2')
+                            },
+                            {
+                                label: 'Notification #3',
+                                onClick: () => console.log('Notification #3')
+                            },
+                            {
+                                label: 'Notification #4',
+                                onClick: () => console.log('Notification #4')
+                            }
+                        ]}
+                        position={{
+                            top: 42,
+                            right: -8
+                        }}
+                    />
                 </div>
                 <div className={classes.separator}></div>
-                <Row vertical='center'>
-                    <span className={[classes.name, classes.cursorPointer].join(' ')}>
-                        Germán Llorente
-                    </span>
-                    <img
-                        src='https://avatars3.githubusercontent.com/u/21162888?s=460&v=4'
-                        alt='avatar'
-                        className={[classes.avatar, classes.cursorPointer].join(' ')}
-                    />
-                </Row>
+                <DropdownComponent
+                    label={
+                        <>
+                            <span className={classes.name}>Germán Llorente</span>
+                            <img
+                                src='https://avatars3.githubusercontent.com/u/21162888?s=460&v=4'
+                                alt='avatar'
+                                className={classes.avatar}
+                            />
+                        </>
+                    }
+                    options={[
+                        {
+                            label: 'Settings',
+                            onClick: onSettingsClick
+                        },
+                        {
+                            label: 'Logout',
+                            onClick: () => console.log('logout')
+                        }
+                    ]}
+                />
             </Row>
         </Row>
     );

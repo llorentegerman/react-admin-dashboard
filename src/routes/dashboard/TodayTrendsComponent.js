@@ -50,7 +50,7 @@ const useStyles = createUseStyles((theme) => ({
         borderBottom: `1px solid ${theme.color.lightGrayishBlue2}`,
         padding: '24px 32px 24px 32px',
         height: 'calc(114px - 48px)',
-        ':last-child': {
+        '&:last-child': {
             border: 'none'
         }
     },
