@@ -8,18 +8,16 @@ function PrivateRoutes() {
     return (
         <Switch>
             <Route exact path={SLUGS.dashboard} render={() => <div>dashboard</div>} />
-            <Route exact path={SLUGS.overviewTwo} render={() => <div>overviewTwo</div>} />
-            <Route exact path={SLUGS.overviewThree} render={() => <div>overviewThree</div>} />
-            <Route exact path={SLUGS.overview} render={() => <div>overview</div>} />
-            <Route exact path={SLUGS.tickets} render={() => <div>tickets</div>} />
-            <Route exact path={SLUGS.ideasTwo} render={() => <div>ideasTwo</div>} />
-            <Route exact path={SLUGS.ideasThree} render={() => <div>ideasThree</div>} />
-            <Route exact path={SLUGS.ideas} render={() => <div>ideas</div>} />
-            <Route exact path={SLUGS.contacts} render={() => <div>contacts</div>} />
-            <Route exact path={SLUGS.agents} render={() => <div>agents</div>} />
-            <Route exact path={SLUGS.articles} render={() => <div>articles</div>} />
+            <Route exact path={SLUGS.websiteTwo} render={() => <div>websiteTwo</div>} />
+            <Route exact path={SLUGS.websiteThree} render={() => <div>websiteThree</div>} />
+            <Route exact path={SLUGS.website} render={() => <div>website</div>} />
+            <Route exact path={SLUGS.visitors} render={() => <div>visitors</div>} />
+            <Route exact path={SLUGS.reviewsTwo} render={() => <div>reviewsTwo</div>} />
+            <Route exact path={SLUGS.reviewsThree} render={() => <div>reviewsThree</div>} />
+            <Route exact path={SLUGS.reviews} render={() => <div>reviews</div>} />
+            <Route exact path={SLUGS.listings} render={() => <div>listings</div>} />
+            <Route exact path={SLUGS.appointments} render={() => <div>appointments</div>} />
             <Route exact path={SLUGS.settings} render={() => <div>settings</div>} />
-            <Route exact path={SLUGS.subscription} render={() => <div>subscription</div>} />
             <Redirect to={SLUGS.dashboard} />
         </Switch>
     );
