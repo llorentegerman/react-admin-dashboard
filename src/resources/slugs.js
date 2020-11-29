@@ -9,6 +9,6 @@ export default {
     reviewsTwo: '/reviews/two',
     reviewsThree: '/reviews/three',
     listings: '/listings',
-    Appointments: '/Appointments',
+    appointments: '/appointments',
     settings: '/settings',
 };
