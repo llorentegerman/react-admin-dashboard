@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import BootstrapTable from "react-bootstrap-table-next";
+import firebase from "firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "./styles.css";
 import { Button } from "react-bootstrap";
 
@@ -14,8 +15,29 @@ const products = [
   { sourse: "facebook", name: "ABC Dental", address: "2101 California" , phone:"111.111.1111" ,rating:"3/5"}
 ];
 
-
+firebase.initializeApp({
+  apiKey: "AIzaSyAmi8nAcDNVhYjJh1Fjhpu0sND-DO0aKr4",
+  authDomain: "growth-plug.firebaseapp.com",
+})
 class Listings extends Component {
+  state = { isSignedIn: false }
+  uiConfig = {
+    signInFlow: "popup",
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    ],
+    callbacks: {
+      signInSuccess: () => false
+    }
+  }
+
+  componentDidMount = () => {
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({ isSignedIn: !!user })
+      console.log("user", user)
+    })
+  }
   constructor() {
     super();
     this.state = {
@@ -54,32 +76,32 @@ class Listings extends Component {
         {
           dataField: "action",
           text: "Action",
-          formatter: this.linkFollow,
-          sort: true
+          formatter: this.linkUpdate,
         }
       ],
-      isFollow: true
+      isFollow: false
     };
 
-    this.onFollowChanged.bind(this);
+    this.onUpdateChanged.bind(this);
   }
 
-  onFollowChanged() {
+  onUpdateChanged() {
     this.setState({ isFollow: !this.state.isFollow });
     console.log(this.state.isFollow);
   }
 
-  linkFollow = (cell, row, rowIndex, formatExtraData) => {
+  linkUpdate = (cell, row, rowIndex, formatExtraData) => {
     return (
       <Button
         onClick={() => {
-          this.onFollowChanged(row);
+          this.onUpdateChanged(row);
         }}
       >
         Update
       </Button>
     );
   };
+
 
   render() {
     return (
@@ -90,6 +112,18 @@ class Listings extends Component {
           data={products}
           columns={this.state.columns}
         />
+              {this.state.isSignedIn ? (
+          <span>
+            <div>Signed In!</div>
+            <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
+            <h1>Welcome {firebase.auth().currentUser.displayName}</h1>
+          </span>
+        ) : (
+          <StyledFirebaseAuth
+            uiConfig={this.uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+        )}
       </div>
     );
   }
