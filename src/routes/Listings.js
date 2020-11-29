@@ -25,7 +25,6 @@ class Listings extends Component {
     signInFlow: "popup",
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
       signInSuccess: () => false
@@ -92,13 +91,22 @@ class Listings extends Component {
 
   linkUpdate = (cell, row, rowIndex, formatExtraData) => {
     return (
-      <Button
-        onClick={() => {
+             <div>
+             {this.state.isSignedIn ? (
+               <span>
+               <div>Signed In!</div>
+               <Button onClick={() => firebase.auth().signOut()}>Sign out!
+               onClick={() => {
           this.onUpdateChanged(row);
-        }}
-      >
-        Update
-      </Button>
+        }}</Button>
+               </span>
+               ) : (
+                   <StyledFirebaseAuth
+                   uiConfig={this.uiConfig}
+                  firebaseAuth={firebase.auth()}
+                />
+             )}
+           </div>
     );
   };
 
@@ -112,18 +120,6 @@ class Listings extends Component {
           data={products}
           columns={this.state.columns}
         />
-              {this.state.isSignedIn ? (
-          <span>
-            <div>Signed In!</div>
-            <button onClick={() => firebase.auth().signOut()}>Sign out!</button>
-            <h1>Welcome {firebase.auth().currentUser.displayName}</h1>
-          </span>
-        ) : (
-          <StyledFirebaseAuth
-            uiConfig={this.uiConfig}
-            firebaseAuth={firebase.auth()}
-          />
-        )}
       </div>
     );
   }
