@@ -6,6 +6,9 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "./styles.css";
 import { Button } from "react-bootstrap";
+import {
+  IconArticles,
+} from 'assets/icons';
 
 const products = [
   { sourse: "Google", name: "ABC Dental", address: "2101 California", phone:"111.111.1111",rating:"3/5" },
@@ -20,7 +23,8 @@ firebase.initializeApp({
   authDomain: "growth-plug.firebaseapp.com",
 })
 class Listings extends Component {
-  state = { isSignedIn: false }
+  state = { isSignedIn: false ,
+    isList: false}
   uiConfig = {
     signInFlow: "popup",
     signInOptions: [
@@ -34,11 +38,13 @@ class Listings extends Component {
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
+      this.setState({ isList: !!user })
       console.log("user", user)
     })
   }
   constructor() {
     super();
+    isList: false
     this.state = {
       // For displaying data
       columns: [
@@ -66,11 +72,14 @@ class Listings extends Component {
           },
           {
             dataField: "listed",
-            text: "Listed"
+            text: "Listed",
+            formatter: this.linkList,
           },
           {
             dataField: "status",
-            text: "Status"
+            text: "Status",
+            formatter: this.linkStatus,
+
           },
         {
           dataField: "action",
@@ -78,7 +87,7 @@ class Listings extends Component {
           formatter: this.linkUpdate,
         }
       ],
-      isFollow: false
+      isFollow: false,
     };
 
     this.onUpdateChanged.bind(this);
@@ -89,7 +98,7 @@ class Listings extends Component {
     console.log(this.state.isFollow);
   }
 
-  linkUpdate = (cell, row, rowIndex, formatExtraData) => {
+  linkUpdate = ( row) => {
     return (
              <div>
              {this.state.isSignedIn ? (
@@ -110,6 +119,23 @@ class Listings extends Component {
     );
   };
 
+  linkList = () => {
+    return (
+             <div>
+               {this.state.isList ?
+               (<div>yes</div>):
+               (<div>no</div>)}
+              </div>
+    );
+  };
+
+  linkStatus = () => {
+    return (
+             <div>
+               <IconArticles/>
+              </div>
+    );
+  };
 
   render() {
     return (

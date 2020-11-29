@@ -4,21 +4,24 @@
     "private": true,
     "homepage": "https://llorentegerman.github.io/react-admin-dashboard",
     "dependencies": {
-        "react-bootstrap-table-next": "3.1.7",
+        "@fortawesome/fontawesome-svg-core": "^1.2.32",
+        "@fortawesome/free-solid-svg-icons": "^5.15.1",
+        "@fortawesome/react-fontawesome": "^0.1.13",
         "bootstrap": "^4.5.3",
+        "firebase": "^8.1.1",
         "prop-types": "^15.7.2",
         "react": "^16.14.0",
         "react-bootstrap": "^1.4.0",
+        "react-bootstrap-table-next": "3.1.7",
         "react-burger-menu": "^2.6.13",
         "react-collapsible-content": "^1.0.0",
         "react-dom": "^16.8.6",
+        "react-firebaseui": "^4.1.0",
         "react-jss": "^10.4.0",
         "react-router-dom": "^5.2.0",
         "react-scripts": "3.4.3",
         "react-svg-line-chart": "^2.0.1",
-        "simple-flexbox": "^2.3.1",
-        "react-firebaseui": "^4.1.0",
-        "firebase": "^8.1.1"
+        "simple-flexbox": "^2.3.1"
     },
     "scripts": {
         "start": "react-scripts start",

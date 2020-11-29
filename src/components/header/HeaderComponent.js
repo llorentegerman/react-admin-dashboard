@@ -4,7 +4,6 @@ import { Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import { SidebarContext } from 'hooks/useSidebar';
 import SLUGS from 'resources/slugs';
-import { IconBell, IconSearch } from 'assets/icons';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
