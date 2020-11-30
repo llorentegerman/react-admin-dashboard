@@ -23,8 +23,7 @@ firebase.initializeApp({
   authDomain: "growth-plug.firebaseapp.com",
 })
 class Listings extends Component {
-  state = { isSignedIn: false ,
-    isList: false}
+  state = { isSignedIn: false }
   uiConfig = {
     signInFlow: "popup",
     signInOptions: [
@@ -38,14 +37,13 @@ class Listings extends Component {
   componentDidMount = () => {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({ isSignedIn: !!user })
-      this.setState({ isList: !!user })
       console.log("user", user)
     })
   }
   constructor() {
     super();
-    isList: false
     this.state = {
+      isList: "NO",
       // For displaying data
       columns: [
         {
@@ -89,14 +87,8 @@ class Listings extends Component {
       ],
       isFollow: false,
     };
-
-    this.onUpdateChanged.bind(this);
   }
 
-  onUpdateChanged() {
-    this.setState({ isFollow: !this.state.isFollow });
-    console.log(this.state.isFollow);
-  }
 
   linkUpdate = ( row) => {
     return (
@@ -104,16 +96,19 @@ class Listings extends Component {
              {this.state.isSignedIn ? (
                <span>
                <div>Signed In!</div>
-               <Button onClick={() => firebase.auth().signOut()}>Sign out!
+               <Button onClick={() => firebase.auth().signOut()}
+               onClick={()=>this.change()}>Sign out!
                onClick={() => {
           this.onUpdateChanged(row);
-        }}</Button>
+  }}</Button>
                </span>
                ) : (
-                   <StyledFirebaseAuth
+                 <div>
+                  <StyledFirebaseAuth
                    uiConfig={this.uiConfig}
                   firebaseAuth={firebase.auth()}
                 />
+                 </div>
              )}
            </div>
     );
@@ -122,9 +117,7 @@ class Listings extends Component {
   linkList = () => {
     return (
              <div>
-               {this.state.isList ?
-               (<div>yes</div>):
-               (<div>no</div>)}
+                  {this.state.isList}
               </div>
     );
   };
@@ -136,6 +129,13 @@ class Listings extends Component {
               </div>
     );
   };
+
+  change (){
+    this.setState ({
+      isList:"Yes"
+    })
+  }
+
 
   render() {
     return (
