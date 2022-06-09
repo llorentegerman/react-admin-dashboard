@@ -107,14 +107,14 @@ function TodayTrendsComponent() {
             flexGrow={1}
             className={classes.container}
             horizontal='center'
-            breakpoints={{ 1024: 'column' }}
+            // breakpoints={{ 1024: 'column' }}
         >
             <Column
                 wrap
-                flexGrow={7}
+                flexGrow={10}
                 flexBasis='735px'
                 className={classes.graphSection}
-                breakpoints={{ 1024: { width: 'calc(100% - 48px)', flexBasis: 'auto' } }}
+                // breakpoints={{ 1024: { width: 'calc(100% - 48px)', flexBasis: 'auto' } }}
             >
                 <Row wrap horizontal='space-between'>
                     <Column>
@@ -136,13 +136,13 @@ function TodayTrendsComponent() {
             <Column className={classes.separator} breakpoints={{ 1024: { display: 'none' } }}>
                 <div />
             </Column>
-            <Column flexGrow={3} flexBasis='342px' breakpoints={{ 1024: classes.stats }}>
+            {/* <Column flexGrow={3} flexBasis='342px' breakpoints={{ 1024: classes.stats }}>
                 {renderStat('Resolved', '449')}
                 {renderStat('Received', '426')}
                 {renderStat('Average first response time', '33m')}
                 {renderStat('Average response time', '3h 8m')}
                 {renderStat('Resolution within SLA', '94%')}
-            </Column>
+            </Column> */}
         </Row>
     );
 }
