@@ -7,6 +7,12 @@ https://www.figmafreebies.com/download/figma-admin-dashboard-ui-kit/
 
 Although the code has been totally refactored, in order to use of functional components, hooks and integrated 100% with react-router, you can still find the original project post here "Building a UI from scratch, based on a design with ReactJS" [here](POST.md) or [here](https://dev.to/llorentegerman/building-a-ui-from-scratch-based-on-a-design-with-reactjs-3l1e).
 
+## How to install
+
+-   **Node.js and npm/yarn are required**
+-   **npm/yarn install**
+-   **npm/yarn start**
+
 ## Folder Structure
 
 ### base folder: /src:
@@ -24,6 +30,7 @@ Although the code has been totally refactored, in order to use of functional com
     i.e.: useSidebar, useQuery, etc.
 
 -   **/resources**:
+
     -   slugs.js: a list of the routes that will be used in the app
     -   theme.js: an object with the theme structure, colors, typographies.
     -   utilities.js: any utility function, for example "convertSlugToUrl", which is used in conjunction with "history.push" (react router) for redirects and links.
