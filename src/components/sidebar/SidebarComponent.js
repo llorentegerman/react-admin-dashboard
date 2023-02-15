@@ -48,7 +48,7 @@ function SidebarComponent() {
             </div>
             <MenuItem
                 id={SLUGS.dashboard}
-                title='Dashboard'
+                title='Noteboard QUIZ'
                 icon={IconSubscription}
                 onClick={() => onClick(SLUGS.dashboard)}
             />
@@ -82,7 +82,7 @@ function SidebarComponent() {
             </MenuItem>
             <MenuItem
                 id={SLUGS.tickets}
-                title='Tickets'
+                title='Tickets airplane'
                 icon={IconTickets}
                 onClick={() => onClick(SLUGS.tickets)}
             />
@@ -116,7 +116,7 @@ function SidebarComponent() {
             </MenuItem>
             <MenuItem
                 id={SLUGS.contacts}
-                title='Contacts'
+                title='Contacts for call'
                 icon={IconContacts}
                 onClick={() => onClick(SLUGS.contacts)}
             />
