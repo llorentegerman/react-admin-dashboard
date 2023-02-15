@@ -80,7 +80,7 @@ function HeaderComponent() {
             title = 'Ideas';
             break;
         case currentItem === SLUGS.contacts:
-            title = 'Contacts';
+            title = 'I´m a little stuppid :(';
             break;
         case currentItem === SLUGS.agents:
             title = 'Agents';
