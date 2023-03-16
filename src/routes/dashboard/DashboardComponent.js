@@ -49,7 +49,7 @@ function DashboardComponent() {
     const classes = useStyles();
     return (
         <Column>
-            <Row
+            {/* <Row
                 className={classes.cardsContainer}
                 wrap
                 flexGrow={1}
@@ -92,7 +92,7 @@ function DashboardComponent() {
                         value='64'
                     />
                 </Row>
-            </Row>
+            </Row> */}
             <div className={classes.todayTrends}>
                 <TodayTrendsComponent />
             </div>
