@@ -1,44 +1,48 @@
 {
-    "name": "react-admin-dashboard",
-    "version": "0.1.0",
-    "private": true,
-    "homepage": "https://llorentegerman.github.io/react-admin-dashboard",
-    "dependencies": {
-        "react-jss": "^10.4.0",
-        "prop-types": "^15.7.2",
-        "react": "^16.13.1",
-        "react-burger-menu": "^2.6.13",
-        "react-dom": "^16.8.6",
-        "react-scripts": "3.4.3",
-        "react-svg-line-chart": "^2.0.1",
-        "simple-flexbox": "^2.3.1",
-        "react-collapsible-content": "^1.0.0",
-        "react-router-dom": "^5.2.0"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d build"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "gh-pages": "^2.0.1"
-    }
+  "name": "react-admin-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://llorentegerman.github.io/react-admin-dashboard",
+  "dependencies": {
+    "react-jss": "^10.4.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-burger-menu": "^2.6.13",
+    "react-dom": "^16.8.6",
+    "react-scripts": "5.0.0",
+    "react-svg-line-chart": "^2.0.1",
+    "simple-flexbox": "^2.3.3",
+    "react-collapsible-content": "^1.0.0",
+    "react-router-dom": "^5.2.0",
+    "@snyk/protect": "latest"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "prepare": "yarn run snyk-protect",
+    "snyk-protect": "snyk-protect"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  },
+  "snyk": true
 }
